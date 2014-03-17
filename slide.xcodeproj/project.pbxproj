@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		640B5EB418D65A2E003558C0 /* HermitePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 640B5EB318D65A2E003558C0 /* HermitePath.m */; };
+		640B5EB618D67408003558C0 /* controlpoints.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 640B5EB518D67408003558C0 /* controlpoints.tsv */; };
 		645CE48818CD2C7300CBF980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48718CD2C7300CBF980 /* Foundation.framework */; };
 		645CE48A18CD2C7300CBF980 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48918CD2C7300CBF980 /* CoreGraphics.framework */; };
 		645CE48C18CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
@@ -17,14 +19,17 @@
 		645CE49D18CD2C7300CBF980 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 645CE49B18CD2C7300CBF980 /* Main_iPhone.storyboard */; };
 		645CE4A018CD2C7300CBF980 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 645CE49E18CD2C7300CBF980 /* Main_iPad.storyboard */; };
 		645CE4A318CD2C7300CBF980 /* SLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4A218CD2C7300CBF980 /* SLViewController.m */; };
-		645CE4A618CD2C7300CBF980 /* SLMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4A518CD2C7300CBF980 /* SLMyScene.m */; };
-		645CE4A818CD2C7300CBF980 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 645CE4A718CD2C7300CBF980 /* Spaceship.png */; };
+		645CE4A618CD2C7300CBF980 /* SLRaceScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4A518CD2C7300CBF980 /* SLRaceScene.m */; };
 		645CE4AA18CD2C7300CBF980 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 645CE4A918CD2C7300CBF980 /* Images.xcassets */; };
 		645CE4B118CD2C7300CBF980 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE4B018CD2C7300CBF980 /* XCTest.framework */; };
 		645CE4B218CD2C7300CBF980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48718CD2C7300CBF980 /* Foundation.framework */; };
 		645CE4B318CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
 		645CE4BB18CD2C7300CBF980 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 645CE4B918CD2C7300CBF980 /* InfoPlist.strings */; };
 		645CE4BD18CD2C7300CBF980 /* slideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4BC18CD2C7300CBF980 /* slideTests.m */; };
+		64D287CD18CD55F400580705 /* red truck.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287CC18CD55F400580705 /* red truck.png */; };
+		64D287CF18CD560B00580705 /* shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287CE18CD560B00580705 /* shadow.png */; };
+		64D287D118CD562400580705 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287D018CD562400580705 /* wheel.png */; };
+		64D287D418D00C4B00580705 /* SLTruckSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 64D287D318D00C4B00580705 /* SLTruckSprite.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,30 +43,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		645CE48418CD2C7300CBF980 /* slide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = slide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		640B5EB218D65A2E003558C0 /* HermitePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HermitePath.h; sourceTree = "<group>"; };
+		640B5EB318D65A2E003558C0 /* HermitePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HermitePath.m; sourceTree = "<group>"; };
+		640B5EB518D67408003558C0 /* controlpoints.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = controlpoints.tsv; sourceTree = "<group>"; };
+		645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.temp_caseinsensitive_rename.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		645CE48718CD2C7300CBF980 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		645CE48918CD2C7300CBF980 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		645CE48B18CD2C7300CBF980 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		645CE48D18CD2C7300CBF980 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		645CE49118CD2C7300CBF980 /* slide-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "slide-Info.plist"; sourceTree = "<group>"; };
+		645CE49118CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Slide.temp_caseinsensitive_rename-Info.plist"; sourceTree = "<group>"; };
 		645CE49318CD2C7300CBF980 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		645CE49518CD2C7300CBF980 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		645CE49718CD2C7300CBF980 /* slide-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "slide-Prefix.pch"; sourceTree = "<group>"; };
+		645CE49718CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Slide.temp_caseinsensitive_rename-Prefix.pch"; sourceTree = "<group>"; };
 		645CE49818CD2C7300CBF980 /* SLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLAppDelegate.h; sourceTree = "<group>"; };
 		645CE49918CD2C7300CBF980 /* SLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLAppDelegate.m; sourceTree = "<group>"; };
 		645CE49C18CD2C7300CBF980 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		645CE49F18CD2C7300CBF980 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		645CE4A118CD2C7300CBF980 /* SLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLViewController.h; sourceTree = "<group>"; };
 		645CE4A218CD2C7300CBF980 /* SLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLViewController.m; sourceTree = "<group>"; };
-		645CE4A418CD2C7300CBF980 /* SLMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLMyScene.h; sourceTree = "<group>"; };
-		645CE4A518CD2C7300CBF980 /* SLMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLMyScene.m; sourceTree = "<group>"; };
-		645CE4A718CD2C7300CBF980 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		645CE4A418CD2C7300CBF980 /* SLRaceScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLRaceScene.h; sourceTree = "<group>"; };
+		645CE4A518CD2C7300CBF980 /* SLRaceScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLRaceScene.m; sourceTree = "<group>"; };
 		645CE4A918CD2C7300CBF980 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		645CE4AF18CD2C7300CBF980 /* slideTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = slideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		645CE4AF18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Slide.temp_caseinsensitive_renameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		645CE4B018CD2C7300CBF980 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		645CE4B818CD2C7300CBF980 /* slideTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "slideTests-Info.plist"; sourceTree = "<group>"; };
+		645CE4B818CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Slide.temp_caseinsensitive_renameTests-Info.plist"; sourceTree = "<group>"; };
 		645CE4BA18CD2C7300CBF980 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		645CE4BC18CD2C7300CBF980 /* slideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = slideTests.m; sourceTree = "<group>"; };
+		64D287CC18CD55F400580705 /* red truck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red truck.png"; path = "slide/red truck.png"; sourceTree = "<group>"; };
+		64D287CE18CD560B00580705 /* shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shadow.png; path = slide/shadow.png; sourceTree = "<group>"; };
+		64D287D018CD562400580705 /* wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wheel.png; path = slide/wheel.png; sourceTree = "<group>"; };
+		64D287D218D00C4B00580705 /* SLTruckSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTruckSprite.h; sourceTree = "<group>"; };
+		64D287D318D00C4B00580705 /* SLTruckSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTruckSprite.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,11 +101,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		640B5EAF18D5523D003558C0 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				640B5EB018D552B5003558C0 /* UI */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		640B5EB018D552B5003558C0 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				64D287D018CD562400580705 /* wheel.png */,
+				64D287CE18CD560B00580705 /* shadow.png */,
+				64D287CC18CD55F400580705 /* red truck.png */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		640B5EB118D55344003558C0 /* Sprites */ = {
+			isa = PBXGroup;
+			children = (
+				64D287D218D00C4B00580705 /* SLTruckSprite.h */,
+				64D287D318D00C4B00580705 /* SLTruckSprite.m */,
+			);
+			name = Sprites;
+			sourceTree = "<group>";
+		};
 		645CE47B18CD2C7300CBF980 = {
 			isa = PBXGroup;
 			children = (
-				645CE48F18CD2C7300CBF980 /* slide */,
-				645CE4B618CD2C7300CBF980 /* slideTests */,
+				645CE48F18CD2C7300CBF980 /* Slide */,
+				640B5EAF18D5523D003558C0 /* Assets */,
+				645CE4B618CD2C7300CBF980 /* SlideTests */,
 				645CE48618CD2C7300CBF980 /* Frameworks */,
 				645CE48518CD2C7300CBF980 /* Products */,
 			);
@@ -102,8 +142,8 @@
 		645CE48518CD2C7300CBF980 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				645CE48418CD2C7300CBF980 /* slide.app */,
-				645CE4AF18CD2C7300CBF980 /* slideTests.xctest */,
+				645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */,
+				645CE4AF18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,48 +160,53 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		645CE48F18CD2C7300CBF980 /* slide */ = {
+		645CE48F18CD2C7300CBF980 /* Slide */ = {
 			isa = PBXGroup;
 			children = (
+				640B5EB518D67408003558C0 /* controlpoints.tsv */,
+				640B5EB218D65A2E003558C0 /* HermitePath.h */,
+				640B5EB318D65A2E003558C0 /* HermitePath.m */,
+				640B5EB118D55344003558C0 /* Sprites */,
 				645CE49818CD2C7300CBF980 /* SLAppDelegate.h */,
 				645CE49918CD2C7300CBF980 /* SLAppDelegate.m */,
 				645CE49B18CD2C7300CBF980 /* Main_iPhone.storyboard */,
 				645CE49E18CD2C7300CBF980 /* Main_iPad.storyboard */,
 				645CE4A118CD2C7300CBF980 /* SLViewController.h */,
 				645CE4A218CD2C7300CBF980 /* SLViewController.m */,
-				645CE4A418CD2C7300CBF980 /* SLMyScene.h */,
-				645CE4A518CD2C7300CBF980 /* SLMyScene.m */,
-				645CE4A718CD2C7300CBF980 /* Spaceship.png */,
+				645CE4A418CD2C7300CBF980 /* SLRaceScene.h */,
+				645CE4A518CD2C7300CBF980 /* SLRaceScene.m */,
 				645CE4A918CD2C7300CBF980 /* Images.xcassets */,
 				645CE49018CD2C7300CBF980 /* Supporting Files */,
 			);
+			name = Slide;
 			path = slide;
 			sourceTree = "<group>";
 		};
 		645CE49018CD2C7300CBF980 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				645CE49118CD2C7300CBF980 /* slide-Info.plist */,
+				645CE49118CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename-Info.plist */,
 				645CE49218CD2C7300CBF980 /* InfoPlist.strings */,
 				645CE49518CD2C7300CBF980 /* main.m */,
-				645CE49718CD2C7300CBF980 /* slide-Prefix.pch */,
+				645CE49718CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		645CE4B618CD2C7300CBF980 /* slideTests */ = {
+		645CE4B618CD2C7300CBF980 /* SlideTests */ = {
 			isa = PBXGroup;
 			children = (
 				645CE4BC18CD2C7300CBF980 /* slideTests.m */,
 				645CE4B718CD2C7300CBF980 /* Supporting Files */,
 			);
+			name = SlideTests;
 			path = slideTests;
 			sourceTree = "<group>";
 		};
 		645CE4B718CD2C7300CBF980 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				645CE4B818CD2C7300CBF980 /* slideTests-Info.plist */,
+				645CE4B818CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests-Info.plist */,
 				645CE4B918CD2C7300CBF980 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -170,9 +215,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		645CE48318CD2C7300CBF980 /* slide */ = {
+		645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slide" */;
+			buildConfigurationList = 645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_rename" */;
 			buildPhases = (
 				645CE48018CD2C7300CBF980 /* Sources */,
 				645CE48118CD2C7300CBF980 /* Frameworks */,
@@ -182,14 +227,14 @@
 			);
 			dependencies = (
 			);
-			name = slide;
+			name = Slide.temp_caseinsensitive_rename;
 			productName = slide;
-			productReference = 645CE48418CD2C7300CBF980 /* slide.app */;
+			productReference = 645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */;
 			productType = "com.apple.product-type.application";
 		};
-		645CE4AE18CD2C7300CBF980 /* slideTests */ = {
+		645CE4AE18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 645CE4C318CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slideTests" */;
+			buildConfigurationList = 645CE4C318CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_renameTests" */;
 			buildPhases = (
 				645CE4AB18CD2C7300CBF980 /* Sources */,
 				645CE4AC18CD2C7300CBF980 /* Frameworks */,
@@ -200,9 +245,9 @@
 			dependencies = (
 				645CE4B518CD2C7300CBF980 /* PBXTargetDependency */,
 			);
-			name = slideTests;
+			name = Slide.temp_caseinsensitive_renameTests;
 			productName = slideTests;
-			productReference = 645CE4AF18CD2C7300CBF980 /* slideTests.xctest */;
+			productReference = 645CE4AF18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -212,15 +257,18 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = SL;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Steven Gallagher";
 				TargetAttributes = {
+					645CE48318CD2C7300CBF980 = {
+						DevelopmentTeam = 8Y2D7MHM3J;
+					};
 					645CE4AE18CD2C7300CBF980 = {
 						TestTargetID = 645CE48318CD2C7300CBF980;
 					};
 				};
 			};
-			buildConfigurationList = 645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "slide" */;
+			buildConfigurationList = 645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "Slide" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -233,8 +281,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				645CE48318CD2C7300CBF980 /* slide */,
-				645CE4AE18CD2C7300CBF980 /* slideTests */,
+				645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */,
+				645CE4AE18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests */,
 			);
 		};
 /* End PBXProject section */
@@ -244,10 +292,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				645CE4A818CD2C7300CBF980 /* Spaceship.png in Resources */,
+				64D287D118CD562400580705 /* wheel.png in Resources */,
 				645CE4AA18CD2C7300CBF980 /* Images.xcassets in Resources */,
+				640B5EB618D67408003558C0 /* controlpoints.tsv in Resources */,
+				64D287CF18CD560B00580705 /* shadow.png in Resources */,
 				645CE4A018CD2C7300CBF980 /* Main_iPad.storyboard in Resources */,
 				645CE49D18CD2C7300CBF980 /* Main_iPhone.storyboard in Resources */,
+				64D287CD18CD55F400580705 /* red truck.png in Resources */,
 				645CE49418CD2C7300CBF980 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,7 +319,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				645CE49618CD2C7300CBF980 /* main.m in Sources */,
-				645CE4A618CD2C7300CBF980 /* SLMyScene.m in Sources */,
+				64D287D418D00C4B00580705 /* SLTruckSprite.m in Sources */,
+				645CE4A618CD2C7300CBF980 /* SLRaceScene.m in Sources */,
+				640B5EB418D65A2E003558C0 /* HermitePath.m in Sources */,
 				645CE4A318CD2C7300CBF980 /* SLViewController.m in Sources */,
 				645CE49A18CD2C7300CBF980 /* SLAppDelegate.m in Sources */,
 			);
@@ -287,7 +340,7 @@
 /* Begin PBXTargetDependency section */
 		645CE4B518CD2C7300CBF980 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 645CE48318CD2C7300CBF980 /* slide */;
+			target = 645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */;
 			targetProxy = 645CE4B418CD2C7300CBF980 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -332,7 +385,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -372,7 +424,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -407,10 +458,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "slide/slide-Prefix.pch";
-				INFOPLIST_FILE = "slide/slide-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "slide/Slide.temp_caseinsensitive_rename-Prefix.pch";
+				INFOPLIST_FILE = "slide/Slide.temp_caseinsensitive_rename-Info.plist";
+				PRODUCT_NAME = Slide.temp_caseinsensitive_rename;
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -421,10 +475,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "slide/slide-Prefix.pch";
-				INFOPLIST_FILE = "slide/slide-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "slide/Slide.temp_caseinsensitive_rename-Prefix.pch";
+				INFOPLIST_FILE = "slide/Slide.temp_caseinsensitive_rename-Info.plist";
+				PRODUCT_NAME = Slide.temp_caseinsensitive_rename;
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -433,7 +490,6 @@
 		645CE4C418CD2C7300CBF980 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/slide.app/slide";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -446,8 +502,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "slideTests/slideTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "slideTests/Slide.temp_caseinsensitive_renameTests-Info.plist";
+				PRODUCT_NAME = Slide.temp_caseinsensitive_renameTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -456,7 +512,6 @@
 		645CE4C518CD2C7300CBF980 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/slide.app/slide";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -465,8 +520,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "slide/slide-Prefix.pch";
-				INFOPLIST_FILE = "slideTests/slideTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "slideTests/Slide.temp_caseinsensitive_renameTests-Info.plist";
+				PRODUCT_NAME = Slide.temp_caseinsensitive_renameTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -475,7 +530,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "slide" */ = {
+		645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "Slide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				645CE4BE18CD2C7300CBF980 /* Debug */,
@@ -484,21 +539,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slide" */ = {
+		645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_rename" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				645CE4C118CD2C7300CBF980 /* Debug */,
 				645CE4C218CD2C7300CBF980 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		645CE4C318CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slideTests" */ = {
+		645CE4C318CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_renameTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				645CE4C418CD2C7300CBF980 /* Debug */,
 				645CE4C518CD2C7300CBF980 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

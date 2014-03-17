@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0500"
+   LastUpgradeVersion = "0510"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-               BuildableName = "slide.app"
-               BlueprintName = "slide"
-               ReferencedContainer = "container:slide.xcodeproj">
+               BuildableName = "Slide.temp_caseinsensitive_rename.app"
+               BlueprintName = "Slide.temp_caseinsensitive_rename"
+               ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE4AE18CD2C7300CBF980"
-               BuildableName = "slideTests.xctest"
-               BlueprintName = "slideTests"
-               ReferencedContainer = "container:slide.xcodeproj">
+               BuildableName = "Slide.temp_caseinsensitive_renameTests.xctest"
+               BlueprintName = "Slide.temp_caseinsensitive_renameTests"
+               ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "slide.app"
-            BlueprintName = "slide"
-            ReferencedContainer = "container:slide.xcodeproj">
+            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "slide.app"
-            BlueprintName = "slide"
-            ReferencedContainer = "container:slide.xcodeproj">
+            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "slide.app"
-            BlueprintName = "slide"
-            ReferencedContainer = "container:slide.xcodeproj">
+            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

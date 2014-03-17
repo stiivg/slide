@@ -7,7 +7,7 @@
 //
 
 #import "SLViewController.h"
-#import "SLMyScene.h"
+#import "SLRaceScene.h"
 
 @implementation SLViewController
 
@@ -21,7 +21,7 @@
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [SLMyScene sceneWithSize:skView.bounds.size];
+    SKScene * scene = [SLRaceScene sceneWithSize:skView.bounds.size];
     scene.scaleMode = SKSceneScaleModeAspectFill;
     
     // Present the scene.
