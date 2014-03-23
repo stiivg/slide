@@ -7,7 +7,6 @@
 //
 
 #import "SLRaceScene.h"
-#import "SLTruckSprite.h"
 
 @implementation SLRaceScene
 
@@ -26,6 +25,10 @@
         
         [self addChild:myLabel];
         
+        centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0] size:CGSizeMake(10, 320)];
+        centerWall.position = CGPointMake(384, 512);
+        [self addChild:centerWall];
+        
         HermitePath *_path = [[HermitePath alloc] init];
         [_path createPath:pathPoints];
         //debug draw the path points
@@ -34,27 +37,35 @@
             dot.position = pathPoints[i];
             [self addChild:dot];
         }
+        
+        //Create the player truck
+        truck = [[SLTruckSprite alloc] init];
+        
+        truck.position = _path.getStart;
+        [self addChild:truck];
+        
+        [self initPhysics];
+
 
     }
     return self;
 }
 
+-(void)initPhysics {
+//    self.scaleMode = SKSceneScaleModeAspectFit;
+    //Create edge loop around border
+    self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+    //Create center edge
+    centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:(CGPointMake(384, 352)) toPoint:CGPointMake(384, 672)];
+    
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
-    for (UITouch *touch in touches) {
-        CGPoint location = [touch locationInNode:self];
-        
-        SLTruckSprite *truck = [[SLTruckSprite alloc] init];
-       
-        truck.position = location;
-        
-        SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
-        
-        [truck runAction:[SKAction repeatActionForever:action]];
-        
-        [self addChild:truck];
-    }
+//    for (UITouch *touch in touches) {
+        [truck start];
+//    }
 }
 
 -(void)update:(CFTimeInterval)currentTime {

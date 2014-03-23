@@ -34,6 +34,7 @@
 - (id)createPath:(CGPoint *) pathPoints;
 
 -(int)getNumPathPoints;
+-(CGPoint) getStart;
 
 @end
 

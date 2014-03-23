@@ -271,6 +271,10 @@ const BOOL _newPath = false;
     return _numPathPoints;
 }
 
+-(CGPoint)getStart {
+    return CGPointMake(494,352);
+}
+
 @end
 
 

@@ -14,6 +14,8 @@
 }
 
 - (void)prepareToDraw;
+- (void)initPhysics;
+- (void)start;
 
 
 @end
