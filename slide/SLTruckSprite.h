@@ -16,7 +16,7 @@
 - (void)prepareToDraw;
 - (void)initPhysics;
 - (void)start;
-
+- (void)update;
 
 @end
 

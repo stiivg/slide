@@ -9,7 +9,7 @@
 #import <SpriteKit/SpriteKit.h>
 #import "HermitePath.h"
 #import "SLTruckSprite.h"
-
+#import "VectorUtils.h"
 
 #define kMaxRoadKeyPoints 1000
 
@@ -17,6 +17,7 @@
     CGPoint pathPoints[kMaxRoadKeyPoints];
     SLTruckSprite *truck;
     SKSpriteNode *centerWall;
+    NSArray *pivotPoints;
 }
 
 - (void)initPhysics;

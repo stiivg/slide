@@ -46,6 +46,7 @@
 		640B5EB218D65A2E003558C0 /* HermitePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HermitePath.h; sourceTree = "<group>"; };
 		640B5EB318D65A2E003558C0 /* HermitePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HermitePath.m; sourceTree = "<group>"; };
 		640B5EB518D67408003558C0 /* controlpoints.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = controlpoints.tsv; sourceTree = "<group>"; };
+		641D3A7518DFB9EB004D0F4F /* VectorUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VectorUtils.h; sourceTree = "<group>"; };
 		645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.temp_caseinsensitive_rename.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		645CE48718CD2C7300CBF980 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		645CE48918CD2C7300CBF980 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -177,6 +178,7 @@
 				645CE4A518CD2C7300CBF980 /* SLRaceScene.m */,
 				645CE4A918CD2C7300CBF980 /* Images.xcassets */,
 				645CE49018CD2C7300CBF980 /* Supporting Files */,
+				641D3A7518DFB9EB004D0F4F /* VectorUtils.h */,
 			);
 			name = Slide;
 			path = slide;

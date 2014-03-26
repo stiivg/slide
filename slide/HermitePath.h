@@ -10,6 +10,7 @@
 #define TinyDrift_Path_h
 
 #import <SpriteKit/SpriteKit.h>
+#import "VectorUtils.h"
 
 /** @def CC_CONTENT_SCALE_FACTOR
  On Mac it returns 1;

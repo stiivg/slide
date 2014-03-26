@@ -52,7 +52,21 @@
 
 -(void)start {
     //self.physicsBody.velocity = CGVectorMake(0, 10);
-    [self.physicsBody applyImpulse:CGVectorMake(0, 1)];
+    [self.physicsBody applyImpulse:CGVectorMake(0, 10)];
+}
+
+-(void)steerToTarget {
+    
+}
+
+-(void)applyForces {
+    
+}
+
+-(void)update {
+    //Called at start of frame processing
+    [self steerToTarget];
+    [self applyForces];
 }
 
 @end
