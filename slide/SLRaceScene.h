@@ -1,5 +1,5 @@
 //
-//  SLMyScene.h
+//  SLRaceScene.h
 //  Slide
 //
 
@@ -19,7 +19,9 @@
     SKSpriteNode *centerWall;
     NSArray *pivotPoints;
 }
+@property SKNode*  debugOverlay;
 
 - (void)initPhysics;
+
 
 @end
