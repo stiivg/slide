@@ -18,6 +18,7 @@
     SLTruckSprite *truck;
     SKSpriteNode *centerWall;
     NSArray *pivotPoints;
+    CGFloat steerHeading;
 }
 @property SKNode*  debugOverlay;
 

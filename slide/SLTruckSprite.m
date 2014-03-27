@@ -16,8 +16,8 @@
         
         SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:@"red truck"];
         truckShadow = [SKSpriteNode spriteNodeWithImageNamed:@"shadow"];
-        SKSpriteNode *leftWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
-        SKSpriteNode *rightWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
+        leftWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
+        rightWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
 
         truckShadow.position = CGPointMake(4, 4);
         [self addChild:truckShadow];
@@ -46,6 +46,7 @@
 }
 
 - (void)prepareToDraw {
+    //Move shadow depending on rotation
     CGFloat rotation = self.zRotation + M_PI_2;
     truckShadow.position =  CGPointMake(8*cos(rotation), -8*sin(rotation));
 }
@@ -55,7 +56,17 @@
     [self.physicsBody applyImpulse:CGVectorMake(0, 10)];
 }
 
--(void)steerToTarget {
+-(void)steerToTarget:(CGFloat)steerHeading {
+    //steerHeading is zero to east increasing counter clockwise
+    CGFloat steerAngle = steerHeading - self.zRotation - M_PI_2;
+    if (steerAngle > 0) {
+        steerAngle = fminf(steerAngle, kMaxSteerAngle);
+    } else {
+        steerAngle = fmaxf(steerAngle, -kMaxSteerAngle);
+    }
+//    steerAngle = fminf(steerAngle, kMaxSteerAngle);
+    leftWheel.zRotation = steerAngle;
+    rightWheel.zRotation = steerAngle;
     
 }
 
@@ -63,10 +74,5 @@
     
 }
 
--(void)update {
-    //Called at start of frame processing
-    [self steerToTarget];
-    [self applyForces];
-}
 
 @end

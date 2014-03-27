@@ -65,7 +65,7 @@
         //Create the player truck
         truck = [[SLTruckSprite alloc] init];
         
-        truck.position = CGPointMake(494,512);
+        truck.position = CGPointMake(460,512);
         
         [self addChild:truck];
         
@@ -91,9 +91,11 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
-//    for (UITouch *touch in touches) {
-        [truck start];
-//    }
+    for (UITouch *touch in touches) {
+        CGPoint location = [touch locationInNode:self];
+        truck.position = location;
+//        [truck start];
+    }
 }
 
 //From http://paulbourke.net/geometry/circlesphere/CircleCircleIntersection2.m
@@ -103,7 +105,6 @@
 	//Calculate distance between centres of circle
     CGPoint centresVector = CGPointMake(c1.centre.x - c2.centre.x, c1.centre.y - c2.centre.y);
     float d = ccpLength(centresVector);
-//	float d =[MathsFunctions calcDistance:c1.centre end:c2.centre];
 	float c1r = [c1 radius];
 	float c2r = [c2 radius];
 	float m = c1r + c2r;
@@ -163,41 +164,42 @@
     [self.debugOverlay removeFromParent];
     [self.debugOverlay removeAllChildren];
     
-//    //Calculate the target point and set the steer heading
-//    CGVector truckVelocity = truck.physicsBody.velocity;
-//    CGPoint truckPosition = truck.position;
-//    //determine the target pivot point
-//    //simplistically right side 1, left side 2
-//    Circle *targetPivot = pivotPoints[0];
-//    if (truckPosition.x < 384) {
-//        targetPivot = pivotPoints[1];
-//    }
-//    //calc target point
-//    //vector from truck to pivot point
-//    CGPoint pivotVector = CGPointMake(targetPivot.centre.x - truckPosition.x, targetPivot.centre.y - truckPosition.y);
-//    float pivotDistance = ccpLength(pivotVector);
-//    CGFloat steerHeading = M_PI_2; //Assume straight up
-//    if (pivotDistance <= targetPivot.radius) {
-//        //On radius; steer along tangent
-//        steerHeading = atan2f(pivotVector.x, -pivotVector.y)+M_PI_2;
-//    } else {
-//        //Outside radius; steer to tangent of radius
-//        // targets are the intersection of the pivot circle and carPivotCircle
-//        CGPoint *target1 = NULL, *target2 = NULL;
-//        
-//        //Circle with diameter from car to pivot
-//        Circle *carPivotCircle = [Circle init];
-//        carPivotCircle.centre = ccpAdd(truckPosition, ccpMult(pivotVector, 0.5));
-//        carPivotCircle.radius = pivotDistance/2;
-//
-//        int result = [self findIntersectionOfCircle:targetPivot circle:carPivotCircle sol1:target1 sol2:target2];
-//        //Assume target1 for now
-//        //Steer towards target1
-//        CGPoint targetVector = CGPointMake(target1->x - truckPosition.x, target1->y - truckPosition.y);
-//        steerHeading = M_PI - atan2f(targetVector.y,targetVector.x);
-//    }
+    //Calculate the target point and set the steer heading
+    CGVector truckVelocity = truck.physicsBody.velocity;
+    CGPoint truckPosition = truck.position;
+    //determine the target pivot point
+    //simplistically right side 1, left side 2
+    Circle *targetPivot = pivotPoints[0];
+    if (truckPosition.x < 384) {
+        targetPivot = pivotPoints[1];
+    }
+    //calc target point
+    //vector from truck to pivot point
+    CGPoint pivotVector = CGPointMake(targetPivot.centre.x - truckPosition.x, targetPivot.centre.y - truckPosition.y);
+    float pivotDistance = ccpLength(pivotVector);
+    steerHeading = M_PI_2; //Assume straight up
+    if (pivotDistance <= targetPivot.radius) {
+        //On radius; steer along tangent
+        steerHeading = atan2f(pivotVector.y, pivotVector.x)-M_PI_2;
+    } else {
+        //Outside radius; steer to tangent of radius
+        // targets are the intersection of the pivot circle and carPivotCircle
+        CGPoint target1 = CGPointMake(0, 0);
+        CGPoint target2 = CGPointMake(0, 0);
+        
+        //Circle with diameter from car to pivot
+        Circle *carPivotCircle = [[Circle alloc] init];
+        carPivotCircle.centre = ccpAdd(truckPosition, ccpMult(pivotVector, 0.5));
+        carPivotCircle.radius = pivotDistance/2;
+
+        int result = [self findIntersectionOfCircle:targetPivot circle:carPivotCircle sol1:&target1 sol2:&target2];
+        //Assume target2 for now
+        //Steer towards target2
+        CGPoint targetVector = CGPointMake(target2.x - truckPosition.x, target2.y - truckPosition.y);
+        steerHeading = atan2f(targetVector.y,targetVector.x);
+    }
     //Send steerHeading to the truck
-    
+    [truck steerToTarget:steerHeading];
 }
 
 -(void)debugDrawPivotPoints {
@@ -217,6 +219,25 @@
     
 }
 
+-(void)debugDrawSteeringVector {
+    SKShapeNode *steeringLine = [[SKShapeNode alloc] init];
+    steeringLine.position = truck.position;
+    CGFloat steerX = 500*cosf(steerHeading);
+    CGFloat steerY = 500*sinf(steerHeading);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0.0, 0.0);
+    CGPathAddLineToPoint(path, 0, steerX, steerY);
+    CGPathCloseSubpath(path);
+    steeringLine.path = path;
+    steeringLine.strokeColor = [SKColor colorWithRed:0 green:1.0 blue:0 alpha:0.5];
+    steeringLine.lineWidth = 0.1;
+    CGPathRelease(path);
+    
+    [self.debugOverlay addChild: steeringLine];
+
+}
+
 -(void)didSimulatePhysics {
     /* Called before final frame rendered */
     // Update the car shadow position
@@ -227,6 +248,8 @@
     
     // add code to create and add debugging images to the debug node.
     [self debugDrawPivotPoints];
+    
+    [self debugDrawSteeringVector];
 }
 
 

@@ -8,11 +8,15 @@
 
 #import <SpriteKit/SpriteKit.h>
 
+#define kMaxSteerAngle 1.0f
 
 @interface SLTruckSprite : SKSpriteNode {
-   SKSpriteNode *truckShadow;
+    SKSpriteNode *truckShadow;
+    SKSpriteNode *leftWheel;
+    SKSpriteNode *rightWheel;
 }
 
+- (void)steerToTarget:(CGFloat)steerHeading;
 - (void)prepareToDraw;
 - (void)initPhysics;
 - (void)start;
