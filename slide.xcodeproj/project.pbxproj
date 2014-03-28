@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		640B5EB418D65A2E003558C0 /* HermitePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 640B5EB318D65A2E003558C0 /* HermitePath.m */; };
 		640B5EB618D67408003558C0 /* controlpoints.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 640B5EB518D67408003558C0 /* controlpoints.tsv */; };
+		641D3A7718E519DB004D0F4F /* SlideImages.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 641D3A7618E519DB004D0F4F /* SlideImages.atlas */; };
 		645CE48818CD2C7300CBF980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48718CD2C7300CBF980 /* Foundation.framework */; };
 		645CE48A18CD2C7300CBF980 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48918CD2C7300CBF980 /* CoreGraphics.framework */; };
 		645CE48C18CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
@@ -26,9 +27,6 @@
 		645CE4B318CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
 		645CE4BB18CD2C7300CBF980 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 645CE4B918CD2C7300CBF980 /* InfoPlist.strings */; };
 		645CE4BD18CD2C7300CBF980 /* slideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4BC18CD2C7300CBF980 /* slideTests.m */; };
-		64D287CD18CD55F400580705 /* red truck.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287CC18CD55F400580705 /* red truck.png */; };
-		64D287CF18CD560B00580705 /* shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287CE18CD560B00580705 /* shadow.png */; };
-		64D287D118CD562400580705 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = 64D287D018CD562400580705 /* wheel.png */; };
 		64D287D418D00C4B00580705 /* SLTruckSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 64D287D318D00C4B00580705 /* SLTruckSprite.m */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +45,7 @@
 		640B5EB318D65A2E003558C0 /* HermitePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HermitePath.m; sourceTree = "<group>"; };
 		640B5EB518D67408003558C0 /* controlpoints.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = controlpoints.tsv; sourceTree = "<group>"; };
 		641D3A7518DFB9EB004D0F4F /* VectorUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VectorUtils.h; sourceTree = "<group>"; };
+		641D3A7618E519DB004D0F4F /* SlideImages.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = SlideImages.atlas; path = slide/SlideImages.atlas; sourceTree = "<group>"; };
 		645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.temp_caseinsensitive_rename.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		645CE48718CD2C7300CBF980 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		645CE48918CD2C7300CBF980 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -70,9 +69,6 @@
 		645CE4B818CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Slide.temp_caseinsensitive_renameTests-Info.plist"; sourceTree = "<group>"; };
 		645CE4BA18CD2C7300CBF980 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		645CE4BC18CD2C7300CBF980 /* slideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = slideTests.m; sourceTree = "<group>"; };
-		64D287CC18CD55F400580705 /* red truck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red truck.png"; path = "slide/red truck.png"; sourceTree = "<group>"; };
-		64D287CE18CD560B00580705 /* shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shadow.png; path = slide/shadow.png; sourceTree = "<group>"; };
-		64D287D018CD562400580705 /* wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wheel.png; path = slide/wheel.png; sourceTree = "<group>"; };
 		64D287D218D00C4B00580705 /* SLTruckSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTruckSprite.h; sourceTree = "<group>"; };
 		64D287D318D00C4B00580705 /* SLTruckSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTruckSprite.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,9 +109,7 @@
 		640B5EB018D552B5003558C0 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				64D287D018CD562400580705 /* wheel.png */,
-				64D287CE18CD560B00580705 /* shadow.png */,
-				64D287CC18CD55F400580705 /* red truck.png */,
+				641D3A7618E519DB004D0F4F /* SlideImages.atlas */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -294,13 +288,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64D287D118CD562400580705 /* wheel.png in Resources */,
 				645CE4AA18CD2C7300CBF980 /* Images.xcassets in Resources */,
+				641D3A7718E519DB004D0F4F /* SlideImages.atlas in Resources */,
 				640B5EB618D67408003558C0 /* controlpoints.tsv in Resources */,
-				64D287CF18CD560B00580705 /* shadow.png in Resources */,
 				645CE4A018CD2C7300CBF980 /* Main_iPad.storyboard in Resources */,
 				645CE49D18CD2C7300CBF980 /* Main_iPhone.storyboard in Resources */,
-				64D287CD18CD55F400580705 /* red truck.png in Resources */,
 				645CE49418CD2C7300CBF980 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

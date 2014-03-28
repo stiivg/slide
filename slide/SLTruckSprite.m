@@ -13,17 +13,20 @@
 #pragma mark - Initialization
 - (id)init {
     if ( self = [super init] ) {
-        
-        SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:@"red truck"];
-        truckShadow = [SKSpriteNode spriteNodeWithImageNamed:@"shadow"];
-        leftWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
-        rightWheel = [SKSpriteNode spriteNodeWithImageNamed:@"wheel"];
+        SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"SlideImages"];
+        SKTexture *truckTexture = [atlas textureNamed:@"red_truck"];
+        SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithTexture:truckTexture];
+        SKTexture *shadowTexture = [atlas textureNamed:@"shadow"];
+        truckShadow = [SKSpriteNode spriteNodeWithTexture:shadowTexture];
+        SKTexture *wheelTexture = [atlas textureNamed:@"wheel"];
+        leftWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
+        rightWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
 
         truckShadow.position = CGPointMake(4, 4);
         [self addChild:truckShadow];
         
-        leftWheel.position = CGPointMake(-24, 30);
-        rightWheel.position = CGPointMake(24, 30);
+        leftWheel.position = CGPointMake(30, 24);
+        rightWheel.position = CGPointMake(30, -24);
         
         
         [self addChild:leftWheel];
@@ -33,6 +36,7 @@
 //        self.position = CGPointMake(494, 352);
         
         [self initPhysics];
+        self.zRotation = M_PI_2;
 
         return self;
     } else
@@ -41,7 +45,7 @@
 
 - (void)initPhysics {
 //    CGSize size = self.size; // size is 0,0 !!
-    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(58, 96)];
+    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(96, 58)];
     self.physicsBody.affectedByGravity = false;
 }
 
@@ -58,7 +62,7 @@
 
 -(void)steerToTarget:(CGFloat)steerHeading {
     //steerHeading is zero to east increasing counter clockwise
-    CGFloat steerAngle = steerHeading - self.zRotation - M_PI_2;
+    CGFloat steerAngle = steerHeading - self.zRotation;
     if (steerAngle > 0) {
         steerAngle = fminf(steerAngle, kMaxSteerAngle);
     } else {
