@@ -8,18 +8,27 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-#define kMaxSteerAngle 1.0f
-
 @interface SLTruckSprite : SKSpriteNode {
     SKSpriteNode *truckShadow;
     SKSpriteNode *leftWheel;
     SKSpriteNode *rightWheel;
+    CGFloat throttle;
+    CGFloat cgBalance; //0=rear, 1=front
+    
 }
 
-- (void)steerToTarget:(CGFloat)steerHeading;
-- (void)prepareToDraw;
-- (void)initPhysics;
-- (void)start;
+@property CGFloat rearSlipAngle;
+@property CGFloat frontSlipAngle;
+@property CGVector rearTireForce;
+@property CGVector frontTireForce;
+@property SKNode*  debugOverlay;
+
+-(void)steerToTarget:(CGFloat)steerHeading;
+-(void)prepareToDraw;
+-(void)initPhysics;
+-(void)start;
+-(void)removeDebugNodes;
+-(void)displayDebug;
 
 @end
 

@@ -94,7 +94,7 @@
     for (UITouch *touch in touches) {
         CGPoint location = [touch locationInNode:self];
         truck.position = location;
-//        [truck start];
+        [truck start];
     }
 }
 
@@ -163,6 +163,7 @@
     //Temporarily remove debug nodes
     [self.debugOverlay removeFromParent];
     [self.debugOverlay removeAllChildren];
+    [truck removeDebugNodes];
     
     //Calculate the target point and set the steer heading
     CGVector truckVelocity = truck.physicsBody.velocity;
@@ -223,24 +224,30 @@
     
 }
 
--(void)debugDrawSteeringVector {
-    SKShapeNode *steeringLine = [[SKShapeNode alloc] init];
-    steeringLine.position = truck.position;
-    CGFloat steerX = 500*cosf(steerHeading);
-    CGFloat steerY = 500*sinf(steerHeading);
+-(void)debugDrawDirectionVector:(CGFloat)direction length:(CGFloat)length position:(CGPoint)position{
+    SKShapeNode *directionLine = [[SKShapeNode alloc] init];
+    directionLine.position = position;
+    CGFloat directionX = length *cosf(direction);
+    CGFloat directionY = length *sinf(direction);
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0.0, 0.0);
-    CGPathAddLineToPoint(path, 0, steerX, steerY);
+    CGPathAddLineToPoint(path, 0, directionX, directionY);
     CGPathCloseSubpath(path);
-    steeringLine.path = path;
-    steeringLine.strokeColor = [SKColor colorWithRed:0 green:1.0 blue:0 alpha:0.5];
-    steeringLine.lineWidth = 0.1;
+    directionLine.path = path;
+    directionLine.strokeColor = [SKColor colorWithRed:0 green:1.0 blue:0 alpha:0.5];
+    directionLine.lineWidth = 0.1;
     CGPathRelease(path);
     
-    [self.debugOverlay addChild: steeringLine];
-
+    [self.debugOverlay addChild: directionLine];
+    
 }
+
+
+-(void)debugDrawSteeringVector {
+    [self debugDrawDirectionVector:steerHeading length:500 position:truck.position];
+}
+
 
 -(void)didSimulatePhysics {
     /* Called before final frame rendered */
@@ -254,6 +261,8 @@
     [self debugDrawPivotPoints];
     
     [self debugDrawSteeringVector];
+    
+    [truck displayDebug];
 }
 
 
