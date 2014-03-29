@@ -61,14 +61,19 @@
 }
 
 -(void)steerToTarget:(CGFloat)steerHeading {
-    //steerHeading is zero to east increasing counter clockwise
+    //steerHeading is zero to east increasing counter clockwise in range +/- PI
     CGFloat steerAngle = steerHeading - self.zRotation;
+    if (steerAngle > 0 & steerAngle > M_PI) {
+        steerAngle = steerAngle - M_PI - M_PI; //large pos -> small neg
+    } else if (steerAngle <0 & steerAngle < -M_PI) {
+        steerAngle = steerAngle + M_PI + M_PI; //large neg -> small pos
+    }
+    
     if (steerAngle > 0) {
         steerAngle = fminf(steerAngle, kMaxSteerAngle);
     } else {
         steerAngle = fmaxf(steerAngle, -kMaxSteerAngle);
     }
-//    steerAngle = fminf(steerAngle, kMaxSteerAngle);
     leftWheel.zRotation = steerAngle;
     rightWheel.zRotation = steerAngle;
     

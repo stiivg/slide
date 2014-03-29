@@ -181,6 +181,10 @@
     if (pivotDistance <= targetPivot.radius) {
         //On radius; steer along tangent
         steerHeading = atan2f(pivotVector.y, pivotVector.x)-M_PI_2;
+        if (steerHeading > M_PI) {
+            steerHeading = M_2_PI - steerHeading;
+        }
+        //steerHeading = fmodf(steerHeading, M_2_PI);
     } else {
         //Outside radius; steer to tangent of radius
         // targets are the intersection of the pivot circle and carPivotCircle
