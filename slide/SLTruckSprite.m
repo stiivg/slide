@@ -10,7 +10,8 @@
 #import "VectorUtils.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireStiffness 200
+#define kTireStiffness 8
+#define kTireAngleMaxLinear 0.5 //Maximum angle with linear tire scrub force
 
 
 @implementation SLTruckSprite
@@ -25,7 +26,7 @@
     if ( self = [super init] ) {
         SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"SlideImages"];
         SKTexture *truckTexture = [atlas textureNamed:@"red_truck"];
-        SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithTexture:truckTexture];
+        SKSpriteNode *truck = [SKSpriteNode spriteNodeWithTexture:truckTexture];
         SKTexture *shadowTexture = [atlas textureNamed:@"shadow"];
         truckShadow = [SKSpriteNode spriteNodeWithTexture:shadowTexture];
         SKTexture *wheelTexture = [atlas textureNamed:@"wheel"];
@@ -41,7 +42,7 @@
         
         [self addChild:leftWheel];
         [self addChild:rightWheel];
-        [self addChild:sprite];
+        [self addChild:truck];
         
 //        self.position = CGPointMake(494, 352);
         
@@ -64,6 +65,7 @@
 //    CGSize size = self.size; // size is 0,0 !!
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(96, 58)];
     self.physicsBody.affectedByGravity = false;
+    self.physicsBody.angularDamping = 0.4;
 }
 
 - (void)prepareToDraw {
@@ -122,29 +124,38 @@
     //front slip angle from velocity, rotation and steering angle
     frontSlipAngle = frontSlipAngle + truckSlipAngle + leftWheel.zRotation;
     
-    //calc the lateral velocity angle for torque force direction
-    CGFloat latVelAngle = velocityAngle+M_PI_2;
-    
     //calc the rear scrub force
-    CGFloat scrubForce = kTireStiffness*fabsf(rearSlipAngle);
-    if (fabsf(rearSlipAngle) > 0.05) {
-        scrubForce = kTireStiffness*0.05;
+    CGFloat scrubForce = kTireStiffness*rearSlipAngle;
+    if (rearSlipAngle > kTireAngleMaxLinear) {
+        scrubForce = kTireStiffness*kTireAngleMaxLinear;
+    } else if (rearSlipAngle < -kTireAngleMaxLinear) {
+        scrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
     
-    //apply the rear torque force
-    rearTireForce = CGVectorMake(scrubForce*cosf(latVelAngle), scrubForce*sinf(latVelAngle));
-//    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(0, 29)];
+    //truck y direction
+    CGFloat torqueForceDirection = truckDirection + M_PI_2;
+    
+    //apply the rear torque force in truck y direction only
+    rearTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
+                                         scrubForce*sinf(torqueForceDirection));
+    
+    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(0, 29)];
     
     //calc the front scrub force
-    scrubForce = kTireStiffness*fabsf(frontSlipAngle);
-    if (fabsf(frontSlipAngle) > 0.05) {
-        scrubForce = kTireStiffness*0.05;
+    scrubForce = kTireStiffness*frontSlipAngle;
+    if (frontSlipAngle > kTireAngleMaxLinear) {
+        scrubForce = kTireStiffness*kTireAngleMaxLinear;
+    } else if (frontSlipAngle < -kTireAngleMaxLinear) {
+        scrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
     
-    //apply front scrub torque force
-    frontTireForce = CGVectorMake(-scrubForce*cosf(latVelAngle), -scrubForce*sinf(latVelAngle));
-//    [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(96, 29)];
+    //apply front scrub torque force in truck y direction only
+    frontTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
+                                 scrubForce*sinf(torqueForceDirection));
+    [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(96, 29)];
 }
+
+#pragma mark debug drawing
 
 -(void)debugDrawDirectionVector:(CGFloat)direction length:(CGFloat)length position:(CGPoint)position{
     SKShapeNode *directionLine = [[SKShapeNode alloc] init];
@@ -157,11 +168,30 @@
     CGPathAddLineToPoint(path, 0, directionX, directionY);
     CGPathCloseSubpath(path);
     directionLine.path = path;
-    directionLine.strokeColor = [SKColor colorWithRed:1.0 green:1.0 blue:0 alpha:0.5];
+    directionLine.strokeColor = [SKColor colorWithRed:1.0 green:1.0 blue:0 alpha:0.5]; //Yellow
     directionLine.lineWidth = 0.1;
     CGPathRelease(path);
     
     [self.debugOverlay addChild: directionLine];
+    
+}
+
+-(void)debugDrawVector:(CGVector)vector length:(CGFloat)length position:(CGPoint)position{
+    SKShapeNode *vectorLine = [[SKShapeNode alloc] init];
+    vectorLine.position = position;
+    CGFloat directionX = 10*vector.dx;
+    CGFloat directionY = 10*vector.dy;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0.0, 0.0);
+    CGPathAddLineToPoint(path, 0, directionX, directionY);
+    CGPathCloseSubpath(path);
+    vectorLine.path = path;
+    vectorLine.strokeColor = [SKColor colorWithRed:1.0 green:0.0 blue:0.5 alpha:1.0];
+    vectorLine.lineWidth = 0.1;
+    CGPathRelease(path);
+    
+    [self.debugOverlay addChild: vectorLine];
     
 }
 
@@ -176,9 +206,6 @@
     [self debugDrawDirectionVector:frontSlipAngle length:50 position:CGPointMake(48, 0)];
     [self debugDrawDirectionVector:rearSlipAngle length:50 position:CGPointMake(-48, 0)];
     
-//    [self debugDrawDirectionVector:truck.frontTireForce length:50];
-//    [self debugDrawDirectionVector:truck.rearTireForce length:50];
-//    
 }
 
 -(void)displayDebug {

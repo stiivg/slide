@@ -8,6 +8,7 @@
 
 #import "SLRaceScene.h"
 
+
 //Define object to hold pivot point info
 @interface Circle : NSObject
 
@@ -24,6 +25,8 @@
 @end
 
 @implementation SLRaceScene
+
+const bool kDisplayDebug = true;
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
@@ -71,10 +74,11 @@
         
         [self initPhysics];
         
-        //Create debug nodes
-        self.debugOverlay = [SKNode node];
-        [self addChild:self.debugOverlay];
-
+        if (kDisplayDebug) {
+            //Create debug nodes
+            self.debugOverlay = [SKNode node];
+            [self addChild:self.debugOverlay];
+        }
     }
     return self;
 }
@@ -243,6 +247,25 @@
     
 }
 
+-(void)debugDrawVector:(CGVector)vector length:(CGFloat)length position:(CGPoint)position{
+    SKShapeNode *vectorLine = [[SKShapeNode alloc] init];
+    vectorLine.position = position;
+    CGFloat directionX = 10*vector.dx;
+    CGFloat directionY = 10*vector.dy;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0.0, 0.0);
+    CGPathAddLineToPoint(path, 0, directionX, directionY);
+    CGPathCloseSubpath(path);
+    vectorLine.path = path;
+    vectorLine.strokeColor = [SKColor colorWithRed:1.0 green:0.0 blue:0.5 alpha:1.0];
+    vectorLine.lineWidth = 0.1;
+    CGPathRelease(path);
+    
+    [self.debugOverlay addChild: vectorLine];
+    
+}
+
 
 -(void)debugDrawSteeringVector {
     [self debugDrawDirectionVector:steerHeading length:500 position:truck.position];
@@ -255,14 +278,27 @@
     [truck prepareToDraw];
     
     //Display debug nodes
-    [self addChild:self.debugOverlay];
-    
-    // add code to create and add debugging images to the debug node.
-    [self debugDrawPivotPoints];
-    
-    [self debugDrawSteeringVector];
-    
-    [truck displayDebug];
+    if (kDisplayDebug) {
+        [self addChild:self.debugOverlay];
+        
+        // add code to create and add debugging images to the debug node.
+        [self debugDrawPivotPoints];
+        
+        [self debugDrawSteeringVector];
+        [self debugDrawVector:truck.physicsBody.velocity length:50 position:truck.position];
+        
+        [self debugDrawVector:truck.frontTireForce length:50
+                position:CGPointMake(truck.position.x+48*cosf(truck.zRotation),
+                                     truck.position.y+48*sinf(truck.zRotation))];
+        
+        [self debugDrawVector:truck.rearTireForce length:50
+                     position:CGPointMake(truck.position.x-48*cosf(truck.zRotation),
+                                          truck.position.y-48*sinf(truck.zRotation))];
+
+        
+        [truck displayDebug];
+        
+    }
 }
 
 
