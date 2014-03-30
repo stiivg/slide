@@ -10,7 +10,7 @@
 #import "VectorUtils.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireStiffness 8
+#define kTireStiffness 80
 #define kTireAngleMaxLinear 0.5 //Maximum angle with linear tire scrub force
 
 
@@ -65,7 +65,7 @@
 //    CGSize size = self.size; // size is 0,0 !!
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(96, 58)];
     self.physicsBody.affectedByGravity = false;
-    self.physicsBody.angularDamping = 0.4;
+    self.physicsBody.angularDamping = 0.1;
 }
 
 - (void)prepareToDraw {
@@ -76,6 +76,10 @@
 
 -(void)start {
     throttle = 10.0;
+    self.physicsBody.angularVelocity = 0;
+    self.physicsBody.velocity = CGVectorMake(0, 0);
+    self.zRotation = M_PI_2;
+
 }
 
 -(void)steerToTarget:(CGFloat)steerHeading {
@@ -139,7 +143,9 @@
     rearTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
                                          scrubForce*sinf(torqueForceDirection));
     
-    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(0, 29)];
+//    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(0, 29)];
+    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(self.position.x-48*cosf(self.zRotation),
+                                                                    self.position.y-48*sinf(self.zRotation))];
     
     //calc the front scrub force
     scrubForce = kTireStiffness*frontSlipAngle;
@@ -152,7 +158,12 @@
     //apply front scrub torque force in truck y direction only
     frontTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
                                  scrubForce*sinf(torqueForceDirection));
-    [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(96, 29)];
+    //All physics forces are in scene coordinates for force vector and position
+    //Use truck position and rotation to apply force in the correct position on the truck
+    [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(self.position.x+48*cosf(self.zRotation),
+                                                                    self.position.y+48*sinf(self.zRotation))];
+    
+    
 }
 
 #pragma mark debug drawing
