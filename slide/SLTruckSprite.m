@@ -13,6 +13,8 @@
 #define kTireStiffness 80
 #define kTireAngleMaxLinear 0.5 //Maximum angle with linear tire scrub force
 
+#define kCGBalance 0.8
+#define kWheelBase 1.0
 
 @implementation SLTruckSprite
 
@@ -50,7 +52,6 @@
         self.zRotation = M_PI_2;
         
         throttle = 0.0;  //idling
-        cgBalance = 0.5; //center balanced
         
         //Create debug nodes
         self.debugOverlay = [SKNode node];
@@ -82,14 +83,26 @@
 
 }
 
+//Convert angles > pi to +/-pi range
+-(CGFloat)convertAngle:(CGFloat)angle {
+    if (angle > 0 & angle > M_PI) {
+        angle = angle - M_PI - M_PI; //large pos -> small neg
+    } else if (angle <0 & angle < -M_PI) {
+        angle = angle + M_PI + M_PI; //large neg -> small pos
+    }
+    
+    return angle;
+}
+
 -(void)steerToTarget:(CGFloat)steerHeading {
     //steerHeading is zero to east increasing counter clockwise in range +/- PI
     CGFloat steerAngle = steerHeading - self.zRotation;
-    if (steerAngle > 0 & steerAngle > M_PI) {
-        steerAngle = steerAngle - M_PI - M_PI; //large pos -> small neg
-    } else if (steerAngle <0 & steerAngle < -M_PI) {
-        steerAngle = steerAngle + M_PI + M_PI; //large neg -> small pos
-    }
+    steerAngle = [self convertAngle:steerAngle];
+//    if (steerAngle > 0 & steerAngle > M_PI) {
+//        steerAngle = steerAngle - M_PI - M_PI; //large pos -> small neg
+//    } else if (steerAngle <0 & steerAngle < -M_PI) {
+//        steerAngle = steerAngle + M_PI + M_PI; //large neg -> small pos
+//    }
     
     if (steerAngle > 0) {
         steerAngle = fminf(steerAngle, kMaxSteerAngle);
@@ -109,55 +122,56 @@
                                          throttle*sinf(truckDirection));
     [self.physicsBody applyForce:engineVector];
     
-    //calc the truck slip angle
+    //calc the truck side slip angle
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
-    CGFloat truckSlipAngle = truckDirection - velocityAngle; //angle of truck to direction of travel
+    CGFloat sideSlipAngle = truckDirection - velocityAngle; //angle of truck to direction of travel
+    sideSlipAngle = [self convertAngle:sideSlipAngle];
     
     //calc the rear rotational slip angle
     CGFloat angVel = self.physicsBody.angularVelocity;
-    rearSlipAngle = angVel * (1-cgBalance);
+    rearSlipAngle = angVel * (1-kCGBalance)*kWheelBase;
     
     //rear slip angle from velocity and rotation
-    rearSlipAngle = rearSlipAngle + truckSlipAngle;
+    rearSlipAngle = rearSlipAngle + sideSlipAngle;
     
     
     //calc the front rotational slip angle
-    frontSlipAngle = -angVel * cgBalance;
+    frontSlipAngle = -angVel * kCGBalance * kWheelBase;
     
     //front slip angle from velocity, rotation and steering angle
-    frontSlipAngle = frontSlipAngle + truckSlipAngle + leftWheel.zRotation;
+    frontSlipAngle = frontSlipAngle + sideSlipAngle + leftWheel.zRotation;
     
     //calc the rear scrub force
-    CGFloat scrubForce = kTireStiffness*rearSlipAngle;
+    CGFloat rearScrubForce = kTireStiffness*rearSlipAngle;
     if (rearSlipAngle > kTireAngleMaxLinear) {
-        scrubForce = kTireStiffness*kTireAngleMaxLinear;
+        rearScrubForce = kTireStiffness*kTireAngleMaxLinear;
     } else if (rearSlipAngle < -kTireAngleMaxLinear) {
-        scrubForce = -kTireStiffness*kTireAngleMaxLinear;
+        rearScrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
     
     //truck y direction
     CGFloat torqueForceDirection = truckDirection + M_PI_2;
     
     //apply the rear torque force in truck y direction only
-    rearTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
-                                         scrubForce*sinf(torqueForceDirection));
+    rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
+                                         rearScrubForce*sinf(torqueForceDirection));
     
 //    [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(0, 29)];
     [self.physicsBody applyForce:rearTireForce atPoint:CGPointMake(self.position.x-48*cosf(self.zRotation),
                                                                     self.position.y-48*sinf(self.zRotation))];
     
     //calc the front scrub force
-    scrubForce = kTireStiffness*frontSlipAngle;
+    CGFloat frontScrubForce = kTireStiffness*frontSlipAngle;
     if (frontSlipAngle > kTireAngleMaxLinear) {
-        scrubForce = kTireStiffness*kTireAngleMaxLinear;
+        frontScrubForce = kTireStiffness*kTireAngleMaxLinear;
     } else if (frontSlipAngle < -kTireAngleMaxLinear) {
-        scrubForce = -kTireStiffness*kTireAngleMaxLinear;
+        frontScrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
     
     //apply front scrub torque force in truck y direction only
-    frontTireForce = CGVectorMake(scrubForce*cosf(torqueForceDirection),
-                                 scrubForce*sinf(torqueForceDirection));
+    frontTireForce = CGVectorMake(frontScrubForce*cosf(torqueForceDirection),
+                                 frontScrubForce*sinf(torqueForceDirection));
     //All physics forces are in scene coordinates for force vector and position
     //Use truck position and rotation to apply force in the correct position on the truck
     [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(self.position.x+48*cosf(self.zRotation),
