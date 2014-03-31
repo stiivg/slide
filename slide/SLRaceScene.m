@@ -295,6 +295,8 @@ const bool kDisplayDebug = true;
                      position:CGPointMake(truck.position.x-48*cosf(truck.zRotation),
                                           truck.position.y-48*sinf(truck.zRotation))];
 
+        [self debugDrawVector:truck.lateralForce length:50
+                     position:CGPointMake(truck.position.x, truck.position.y)];
         
         [truck displayDebug];
         
