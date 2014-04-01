@@ -10,11 +10,11 @@
 #import "VectorUtils.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireStiffness 200
+#define kTireStiffness 8
 #define kTireAngleMaxLinear 0.5 //Maximum angle with linear tire scrub force
 
-#define kCGBalance 0.8
-#define kWheelBase 1.0
+#define kCGBalance 0.5
+#define kWheelBase 0.64 //96pixels/150pixels/m
 
 @implementation SLTruckSprite
 
@@ -67,7 +67,8 @@
 //    CGSize size = self.size; // size is 0,0 !!
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(96, 58)];
     self.physicsBody.affectedByGravity = false;
-    self.physicsBody.angularDamping = 0.1;
+    self.physicsBody.angularDamping = 0.0;
+    CGFloat masstest =  self.physicsBody.mass;
 }
 
 - (void)prepareToDraw {
@@ -131,17 +132,12 @@
     
     //calc the rear rotational slip angle
     CGFloat angVel = self.physicsBody.angularVelocity;
-    rearSlipAngle = angVel * (1-kCGBalance)*kWheelBase;
+    CGFloat wc = angVel * (1-kCGBalance)*kWheelBase;
+    rearSlipAngle = (sinf(sideSlipAngle) + wc) / fabsf(cosf(sideSlipAngle));
     
-    //rear slip angle from velocity and rotation
-    rearSlipAngle = rearSlipAngle + sideSlipAngle;
+    CGFloat wb = angVel * kCGBalance * kWheelBase;
+    frontSlipAngle = (sinf(sideSlipAngle) - wb) / fabsf(cosf(sideSlipAngle)) + leftWheel.zRotation;
     
-    
-    //calc the front rotational slip angle
-    frontSlipAngle = -angVel * kCGBalance * kWheelBase;
-    
-    //front slip angle from velocity, rotation and steering angle
-    frontSlipAngle = frontSlipAngle + sideSlipAngle + leftWheel.zRotation;
     
     //calc the rear scrub force
     CGFloat rearScrubForce = kTireStiffness*rearSlipAngle;
@@ -168,7 +164,9 @@
     } else if (frontSlipAngle < -kTireAngleMaxLinear) {
         frontScrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
-    //only apply the steerAngle cos to torque force
+    
+    
+    //only apply the steerAngle cos to scrub force
     frontScrubForce = frontScrubForce*cosf(leftWheel.zRotation);
     
     //apply front scrub torque force in truck y direction only
@@ -179,11 +177,11 @@
     [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(self.position.x+48*cosf(self.zRotation),
                                                                     self.position.y+48*sinf(self.zRotation))];
     
-    CGFloat lateralScrubForce = rearScrubForce + frontScrubForce;
+    CGFloat lateralScrubForce = -rearScrubForce + frontScrubForce;
     lateralForce = CGVectorMake(lateralScrubForce*cosf(torqueForceDirection),
                                 lateralScrubForce*sinf(torqueForceDirection));
     
-    [self.physicsBody applyForce:lateralForce atPoint:CGPointMake(self.position.x, self.position.y)];
+    [self.physicsBody applyForce:lateralForce];
     
 }
 
