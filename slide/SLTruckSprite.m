@@ -10,10 +10,10 @@
 #import "VectorUtils.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireStiffness 8
+#define kTireStiffness 400
 #define kTireAngleMaxLinear 0.5 //Maximum angle with linear tire scrub force
 
-#define kCGBalance 0.5
+#define kCGBalance 0.8
 #define kWheelBase 0.64 //96pixels/150pixels/m
 
 @implementation SLTruckSprite
@@ -78,7 +78,7 @@
 }
 
 -(void)start {
-    throttle = 10.0;
+    throttle = 20.0;
     self.physicsBody.angularVelocity = 0;
     self.physicsBody.velocity = CGVectorMake(0, 0);
     self.zRotation = M_PI_2;
@@ -165,23 +165,28 @@
         frontScrubForce = -kTireStiffness*kTireAngleMaxLinear;
     }
     
+    CGFloat frontForceDirection = leftWheel.zRotation + torqueForceDirection;
+    //rotate
     
-    //only apply the steerAngle cos to scrub force
-    frontScrubForce = frontScrubForce*cosf(leftWheel.zRotation);
+//    //only apply the steerAngle cos to scrub force
+//    frontScrubForce = frontScrubForce*cosf(leftWheel.zRotation);
     
     //apply front scrub torque force in truck y direction only
-    frontTireForce = CGVectorMake(frontScrubForce*cosf(torqueForceDirection),
-                                 frontScrubForce*sinf(torqueForceDirection));
+    frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
+                                  frontScrubForce*sinf(frontForceDirection));
+//    //apply front scrub torque force in truck y direction only
+//    frontTireForce = CGVectorMake(frontScrubForce*cosf(torqueForceDirection),
+//                                  frontScrubForce*sinf(torqueForceDirection));
     //All physics forces are in scene coordinates for force vector and position
     //Use truck position and rotation to apply force in the correct position on the truck
     [self.physicsBody applyForce:frontTireForce atPoint:CGPointMake(self.position.x+48*cosf(self.zRotation),
                                                                     self.position.y+48*sinf(self.zRotation))];
     
-    CGFloat lateralScrubForce = -rearScrubForce + frontScrubForce;
-    lateralForce = CGVectorMake(lateralScrubForce*cosf(torqueForceDirection),
-                                lateralScrubForce*sinf(torqueForceDirection));
-    
-    [self.physicsBody applyForce:lateralForce];
+//    CGFloat lateralScrubForce = -rearScrubForce + frontScrubForce;
+//    lateralForce = CGVectorMake(lateralScrubForce*cosf(torqueForceDirection),
+//                                lateralScrubForce*sinf(torqueForceDirection));
+//    
+//    [self.physicsBody applyForce:lateralForce];
     
 }
 
