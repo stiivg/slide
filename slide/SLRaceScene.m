@@ -88,8 +88,7 @@ const bool kDisplayDebug = true;
     //Create edge loop around border
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     //Create center edge
-    centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:(CGPointMake(384, 352)) toPoint:CGPointMake(384, 672)];
-    
+    centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:(CGPointMake(0, -160)) toPoint:CGPointMake(0, 160)];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

@@ -16,11 +16,13 @@
     CGFloat cgBalance; //0=rear, 1=front
     
 }
-
+//+CCW relative to truck heading
 @property CGFloat rearSlipAngle;
 @property CGFloat frontSlipAngle;
+
 @property CGVector rearTireForce;
 @property CGVector frontTireForce;
+
 @property CGVector lateralForce;
 @property SKNode*  debugOverlay;
 
