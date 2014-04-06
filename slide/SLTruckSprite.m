@@ -35,10 +35,10 @@
         
         // Load sprites
         
-        SKTextureAtlas *spriteAtlas = [self textureAtlasNamed:@"sprites"];
+        SKTextureAtlas *spriteAtlas = [SLConversion textureAtlasNamed:@"sprites"];
         SKTexture *truckTexture = [spriteAtlas textureNamed:@"red_truck"];
         SKSpriteNode *truck = [SKSpriteNode spriteNodeWithTexture:truckTexture];
-        truck.userData = [[NSMutableDictionary alloc] init];
+        truck.userData = [[NSMutableDictionary alloc] init]; //for possible future use
         truck.name = @"RedTruck";
         
         SKTexture *shadowTexture = [spriteAtlas textureNamed:@"shadow"];
@@ -69,27 +69,6 @@
         return nil;
 }
 
-- (SKTextureAtlas *)textureAtlasNamed:(NSString *)fileName
-{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        
-        if (IS_WIDESCREEN) {
-            // iPhone Retina 4-inch
-            fileName = [NSString stringWithFormat:@"%@-568", fileName];
-        } else {
-            // iPhone Retina 3.5-inch
-            fileName = fileName;
-        }
-        
-    } else {
-        fileName = [NSString stringWithFormat:@"%@-ipad", fileName];
-    }
-    
-    SKTextureAtlas *textureAtlas = [SKTextureAtlas atlasNamed:fileName];
-    
-    return textureAtlas;
-}
-
 
 /*
  Use the same mass for the car in all sizes.
@@ -104,7 +83,7 @@
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
     self.physicsBody.affectedByGravity = false;
     self.physicsBody.angularDamping = 0.0;
-    self.physicsBody.mass = 0.247466668; //Mass the same for all scaled sizes
+    self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
     CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
 }
 

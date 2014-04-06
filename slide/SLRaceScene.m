@@ -26,7 +26,7 @@
 
 @implementation SLRaceScene
 
-const bool kDisplayDebug = true;
+const bool kDisplayDebug = false;
 
 
 -(id)initWithSize:(CGSize)size {    
@@ -67,13 +67,26 @@ const bool kDisplayDebug = true;
 //        }
         Circle *pivot1 = [[Circle alloc] init];
         pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+80)];
-        pivot1.radius = [SLConversion scaleFloat:55];
+        pivot1.radius = [SLConversion scaleFloat:30];
         
         Circle *pivot2 = [[Circle alloc] init];
         pivot2.centre = [SLConversion convertPoint:CGPointMake(160, centerHt-80)];
-        pivot2.radius = [SLConversion scaleFloat:55];
+        pivot2.radius = [SLConversion scaleFloat:30];
         
         pivotPoints = [NSArray arrayWithObjects:pivot1, pivot2, nil];
+        
+        //oil drums at pivots
+        SKTextureAtlas *spriteAtlas = [SLConversion textureAtlasNamed:@"sprites"];
+        SKTexture *drumTexture = [spriteAtlas textureNamed:@"drum_top"];
+        drum1 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
+        drum1.name = @"Drum1";
+        drum1.position = pivot1.centre;
+        [self addChild:drum1];
+        
+        drum2 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
+        drum2.name = @"Drum2";
+        drum2.position = pivot2.centre;
+        [self addChild:drum2];
         
         //Create the player truck
         truck = [[SLTruckSprite alloc] init];
@@ -184,7 +197,7 @@ const bool kDisplayDebug = true;
     //determine the target pivot point
     //simplistically right side 1, left side 2
     Circle *targetPivot = pivotPoints[0];
-    if (truckPosition.x < [SLConversion scaleFloat:160]) {
+    if (truckPosition.x < targetPivot.centre.x) {
         targetPivot = pivotPoints[1];
     }
     //calc target point

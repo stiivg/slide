@@ -47,6 +47,27 @@
     }
 }
 
++ (SKTextureAtlas *)textureAtlasNamed:(NSString *)fileName
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        
+        if (IS_WIDESCREEN) {
+            // iPhone Retina 4-inch
+            fileName = [NSString stringWithFormat:@"%@-568", fileName];
+        } else {
+            // iPhone Retina 3.5-inch
+            fileName = fileName;
+        }
+        
+    } else {
+        fileName = [NSString stringWithFormat:@"%@-ipad", fileName];
+    }
+    
+    SKTextureAtlas *textureAtlas = [SKTextureAtlas atlasNamed:fileName];
+    
+    return textureAtlas;
+}
+
 
 
 @end

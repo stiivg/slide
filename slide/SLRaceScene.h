@@ -17,6 +17,8 @@
     CGPoint pathPoints[kMaxRoadKeyPoints];
     SLTruckSprite *truck;
     SKSpriteNode *centerWall;
+    SKSpriteNode *drum1;
+    SKSpriteNode *drum2;
     NSArray *pivotPoints;
     CGFloat steerHeading;
 }

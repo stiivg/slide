@@ -38,7 +38,7 @@
     if (!skView.scene) {
         skView.showsFPS = YES;
         skView.showsNodeCount = YES;
-        skView.showsPhysics = YES;
+        skView.showsPhysics = NO;
         
         // Create and configure the scene.
         SKScene * scene = [SLRaceScene sceneWithSize:skView.bounds.size];
