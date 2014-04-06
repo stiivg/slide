@@ -45,9 +45,10 @@ const bool kDisplayDebug = true;
         SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
         
         myLabel.text = @"Slide";
-        myLabel.fontSize = 30;
+        myLabel.fontSize = [SLConversion scaleFloat:15];
+
         myLabel.position = CGPointMake(CGRectGetMidX(self.frame),
-                                       self.frame.size.height - 100);
+                                       self.frame.size.height - [SLConversion scaleFloat:50]);
         
         [self addChild:myLabel];
         
