@@ -91,22 +91,20 @@
 }
 
 
-
+/*
+ Use the same mass for the car in all sizes.
+ The tire scrub and engine forces are x2 for iPad
+ */
 - (void)initPhysics {
     wheelBase = 0.14;
-    tireStiffness = 400;
-    driveThrottle = 120;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        wheelBase = wheelBase;
-        tireStiffness = tireStiffness/8;
-        driveThrottle = driveThrottle/8;
-    }
+    tireStiffness = 200;
+    driveThrottle = 60;
 
 //    CGSize size = self.size; // size is 0,0 !!
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
     self.physicsBody.affectedByGravity = false;
     self.physicsBody.angularDamping = 0.0;
-//    self.physicsBody.mass = 0.247466668;
+    self.physicsBody.mass = 0.247466668; //Mass the same for all scaled sizes
     CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
 }
 
@@ -117,7 +115,7 @@
 }
 
 -(void)start {
-    throttle = driveThrottle;
+    throttle = [SLConversion scaleFloat:driveThrottle];
     self.physicsBody.angularVelocity = 0;
     self.physicsBody.velocity = CGVectorMake(0, 0);
     self.zRotation = M_PI_2;
@@ -192,7 +190,7 @@
     } else if (rearSlipAngle < -kTireAngleMaxLinear) {
         rearScrubForce = -tireStiffness*kTireAngleMaxLinear;
     }
-    rearScrubForce = 1.0*rearScrubForce; //temp loss of rear grip
+    rearScrubForce = 1.0*[SLConversion scaleFloat:rearScrubForce]; //temp loss of rear grip
     
     //truck y direction
     CGFloat torqueForceDirection = self.zRotation + M_PI_2;
@@ -200,7 +198,7 @@
     //apply the rear torque force in truck y direction only
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
                                          rearScrubForce*sinf(torqueForceDirection));
-    
+
     CGFloat rearDistance = [SLConversion scaleFloat:24];
     rearForcePoint = CGPointMake(self.position.x-rearDistance*cosf(self.zRotation),
                                  self.position.y-rearDistance*sinf(self.zRotation));
@@ -213,11 +211,11 @@
     } else if (frontSlipAngle < -kTireAngleMaxLinear) {
         frontScrubForce = -tireStiffness*kTireAngleMaxLinear;
     }
-    
+    frontScrubForce = [SLConversion scaleFloat:frontScrubForce];
+    //Add the steering angle to the torque force direction
     CGFloat frontForceDirection = leftWheel.zRotation + torqueForceDirection;
-    //rotate
     
-    //apply front scrub torque force in truck y direction only
+    //apply front scrub force perpendicular to the wheel
     frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
                                   frontScrubForce*sinf(frontForceDirection));
     
