@@ -23,15 +23,20 @@
 @property CGVector rearTireForce;
 @property CGVector frontTireForce;
 
+@property CGPoint rearForcePoint;
+@property CGPoint frontForcePoint;
+
 @property CGVector lateralForce;
 @property SKNode*  debugOverlay;
+
+@property CGFloat tireStiffness;
+@property CGFloat wheelBase;
+@property CGFloat driveThrottle;
 
 -(void)steerToTarget:(CGFloat)steerHeading;
 -(void)prepareToDraw;
 -(void)initPhysics;
 -(void)start;
--(void)removeDebugNodes;
--(void)displayDebug;
 
 @end
 

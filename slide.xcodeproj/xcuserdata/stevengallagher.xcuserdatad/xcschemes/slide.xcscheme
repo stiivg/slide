@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE48318CD2C7300CBF980"
                BuildableName = "Slide.temp_caseinsensitive_rename.app"
-               BlueprintName = "Slide.temp_caseinsensitive_rename"
+               BlueprintName = "slide"
                ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,7 +34,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE4AE18CD2C7300CBF980"
                BuildableName = "Slide.temp_caseinsensitive_renameTests.xctest"
-               BlueprintName = "Slide.temp_caseinsensitive_renameTests"
+               BlueprintName = "slide_tests"
                ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.temp_caseinsensitive_rename.app"
-            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.temp_caseinsensitive_rename.app"
-            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,7 +81,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.temp_caseinsensitive_rename.app"
-            BlueprintName = "Slide.temp_caseinsensitive_rename"
+            BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

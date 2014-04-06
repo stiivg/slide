@@ -211,9 +211,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */ = {
+		645CE48318CD2C7300CBF980 /* slide */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_rename" */;
+			buildConfigurationList = 645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slide" */;
 			buildPhases = (
 				645CE48018CD2C7300CBF980 /* Sources */,
 				645CE48118CD2C7300CBF980 /* Frameworks */,
@@ -223,7 +223,7 @@
 			);
 			dependencies = (
 			);
-			name = Slide.temp_caseinsensitive_rename;
+			name = slide;
 			productName = slide;
 			productReference = 645CE48418CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename.app */;
 			productType = "com.apple.product-type.application";
@@ -259,9 +259,6 @@
 					645CE48318CD2C7300CBF980 = {
 						DevelopmentTeam = 8Y2D7MHM3J;
 					};
-					645CE4AE18CD2C7300CBF980 = {
-						TestTargetID = 645CE48318CD2C7300CBF980;
-					};
 				};
 			};
 			buildConfigurationList = 645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "Slide" */;
@@ -277,7 +274,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */,
+				645CE48318CD2C7300CBF980 /* slide */,
 				645CE4AE18CD2C7300CBF980 /* Slide.temp_caseinsensitive_renameTests */,
 			);
 		};
@@ -334,7 +331,7 @@
 /* Begin PBXTargetDependency section */
 		645CE4B518CD2C7300CBF980 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 645CE48318CD2C7300CBF980 /* Slide.temp_caseinsensitive_rename */;
+			target = 645CE48318CD2C7300CBF980 /* slide */;
 			targetProxy = 645CE4B418CD2C7300CBF980 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -484,7 +481,6 @@
 		645CE4C418CD2C7300CBF980 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/slide.app/slide";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -498,7 +494,6 @@
 				);
 				INFOPLIST_FILE = "slideTests/Slide.temp_caseinsensitive_renameTests-Info.plist";
 				PRODUCT_NAME = Slide.temp_caseinsensitive_renameTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -506,7 +501,6 @@
 		645CE4C518CD2C7300CBF980 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/slide.app/slide";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -516,7 +510,6 @@
 				GCC_PREFIX_HEADER = "slide/slide-Prefix.pch";
 				INFOPLIST_FILE = "slideTests/Slide.temp_caseinsensitive_renameTests-Info.plist";
 				PRODUCT_NAME = Slide.temp_caseinsensitive_renameTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
@@ -533,7 +526,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "Slide.temp_caseinsensitive_rename" */ = {
+		645CE4C018CD2C7300CBF980 /* Build configuration list for PBXNativeTarget "slide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				645CE4C118CD2C7300CBF980 /* Debug */,

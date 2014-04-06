@@ -7,7 +7,7 @@
 //
 
 #import "SLRaceScene.h"
-
+#import "SLConversion.h"
 
 //Define object to hold pivot point info
 @interface Circle : NSObject
@@ -28,10 +28,18 @@
 
 const bool kDisplayDebug = true;
 
+
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
         
+        
+        float centerHt = 240.0;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && IS_WIDESCREEN) {
+            centerHt = 284.0;
+        }
+                
         self.backgroundColor = [SKColor colorWithRed:0.82 green:0.57 blue:0.3 alpha:1.0]; //Sand color
         
         SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
@@ -43,8 +51,9 @@ const bool kDisplayDebug = true;
         
         [self addChild:myLabel];
         
-        centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0] size:CGSizeMake(10, 320)];
-        centerWall.position = CGPointMake(384, 512);
+        centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0]
+                                                  size:[SLConversion scaleSize:CGSizeMake(5, 160)]];
+        centerWall.position = [SLConversion convertPoint:CGPointMake(160, centerHt)];
         [self addChild:centerWall];
         
 //        HermitePath *hPath = [[HermitePath alloc] init];
@@ -56,19 +65,19 @@ const bool kDisplayDebug = true;
 //            [self addChild:dot];
 //        }
         Circle *pivot1 = [[Circle alloc] init];
-        pivot1.centre = CGPointMake(384, 672);
-        pivot1.radius = 110.0;
+        pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+80)];
+        pivot1.radius = [SLConversion scaleFloat:55];
         
         Circle *pivot2 = [[Circle alloc] init];
-        pivot2.centre = CGPointMake(384, 352);
-        pivot2.radius = 110.0;
+        pivot2.centre = [SLConversion convertPoint:CGPointMake(160, centerHt-80)];
+        pivot2.radius = [SLConversion scaleFloat:55];
         
         pivotPoints = [NSArray arrayWithObjects:pivot1, pivot2, nil];
         
         //Create the player truck
         truck = [[SLTruckSprite alloc] init];
         
-        truck.position = CGPointMake(460,512);
+        truck.position = [SLConversion convertPoint:CGPointMake(215, 240)];
         
         [self addChild:truck];
         
@@ -88,7 +97,8 @@ const bool kDisplayDebug = true;
     //Create edge loop around border
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     //Create center edge
-    centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:(CGPointMake(0, -160)) toPoint:CGPointMake(0, 160)];
+    centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:[SLConversion scalePoint:CGPointMake(0, -80)]
+                                                          toPoint:[SLConversion scalePoint:CGPointMake(0, 80)]];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -166,7 +176,6 @@ const bool kDisplayDebug = true;
     //Temporarily remove debug nodes
     [self.debugOverlay removeFromParent];
     [self.debugOverlay removeAllChildren];
-    [truck removeDebugNodes];
     
     //Calculate the target point and set the steer heading
     CGVector truckVelocity = truck.physicsBody.velocity;
@@ -174,7 +183,7 @@ const bool kDisplayDebug = true;
     //determine the target pivot point
     //simplistically right side 1, left side 2
     Circle *targetPivot = pivotPoints[0];
-    if (truckPosition.x < 384) {
+    if (truckPosition.x < [SLConversion scaleFloat:160]) {
         targetPivot = pivotPoints[1];
     }
     //calc target point
@@ -246,11 +255,12 @@ const bool kDisplayDebug = true;
     
 }
 
--(void)debugDrawVector:(CGVector)vector length:(CGFloat)length position:(CGPoint)position{
+-(void)debugDrawVector:(CGVector)vector position:(CGPoint)position{
     SKShapeNode *vectorLine = [[SKShapeNode alloc] init];
     vectorLine.position = position;
-    CGFloat directionX = 10*vector.dx;
-    CGFloat directionY = 10*vector.dy;
+    CGFloat vectorScale = [SLConversion scaleFloat:5];
+    CGFloat directionX = vectorScale*vector.dx;
+    CGFloat directionY = vectorScale*vector.dy;
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0.0, 0.0);
@@ -267,7 +277,8 @@ const bool kDisplayDebug = true;
 
 
 -(void)debugDrawSteeringVector {
-    [self debugDrawDirectionVector:steerHeading length:500 position:truck.position];
+    CGFloat vectorScale = [SLConversion scaleFloat:250];
+    [self debugDrawDirectionVector:steerHeading length:vectorScale position:truck.position];
 }
 
 
@@ -284,21 +295,20 @@ const bool kDisplayDebug = true;
         [self debugDrawPivotPoints];
         
         [self debugDrawSteeringVector];
-        [self debugDrawVector:truck.physicsBody.velocity length:50 position:truck.position];
+        [self debugDrawVector:truck.physicsBody.velocity position:truck.position];
         
-        [self debugDrawVector:truck.frontTireForce length:50
-                position:CGPointMake(truck.position.x+48*cosf(truck.zRotation),
-                                     truck.position.y+48*sinf(truck.zRotation))];
+        [self debugDrawVector:truck.frontTireForce position:truck.rearForcePoint];
         
-        [self debugDrawVector:truck.rearTireForce length:50
-                     position:CGPointMake(truck.position.x-48*cosf(truck.zRotation),
-                                          truck.position.y-48*sinf(truck.zRotation))];
+        [self debugDrawVector:truck.rearTireForce position:truck.frontForcePoint];
 
-        [self debugDrawVector:truck.lateralForce length:50
-                     position:CGPointMake(truck.position.x, truck.position.y)];
+        [self debugDrawVector:truck.lateralForce position:truck.position];
         
-        [truck displayDebug];
-        
+        CGFloat vectorScale = [SLConversion scaleFloat:25];
+        [self debugDrawDirectionVector:truck.rearSlipAngle+truck.zRotation
+                                length:vectorScale position:truck.rearForcePoint];
+        [self debugDrawDirectionVector:truck.frontSlipAngle+truck.zRotation
+                                length:vectorScale position:truck.frontForcePoint];
+                
     }
 }
 
