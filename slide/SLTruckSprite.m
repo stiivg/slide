@@ -27,7 +27,8 @@
 @synthesize frontForcePoint;
 @synthesize tireStiffness;
 @synthesize wheelBase;
-@synthesize driveThrottle;
+@synthesize throttle;
+@synthesize rearGrip;
 
 #pragma mark - Initialization
 - (id)init {
@@ -76,8 +77,8 @@
  */
 - (void)initPhysics {
     wheelBase = 0.14;
-    tireStiffness = 200;
-    driveThrottle = 60;
+    tireStiffness = 400;
+    rearGrip = 0.5; //rear front balance
 
 //    CGSize size = self.size; // size is 0,0 !!
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
@@ -94,7 +95,8 @@
 }
 
 -(void)start {
-    throttle = [SLConversion scaleFloat:driveThrottle];
+    
+//    self.throttle = [SLConversion scaleFloat:60];
     self.physicsBody.angularVelocity = 0;
     self.physicsBody.velocity = CGVectorMake(0, 0);
     self.zRotation = M_PI_2;
@@ -169,7 +171,7 @@
     } else if (rearSlipAngle < -kTireAngleMaxLinear) {
         rearScrubForce = -tireStiffness*kTireAngleMaxLinear;
     }
-    rearScrubForce = 1.0*[SLConversion scaleFloat:rearScrubForce]; //temp loss of rear grip
+    rearScrubForce = self.rearGrip*[SLConversion scaleFloat:rearScrubForce]; //apply rear grip
     
     //truck y direction
     CGFloat torqueForceDirection = self.zRotation + M_PI_2;
@@ -190,7 +192,7 @@
     } else if (frontSlipAngle < -kTireAngleMaxLinear) {
         frontScrubForce = -tireStiffness*kTireAngleMaxLinear;
     }
-    frontScrubForce = [SLConversion scaleFloat:frontScrubForce];
+    frontScrubForce = (1 - self.rearGrip)*[SLConversion scaleFloat:frontScrubForce];
     //Add the steering angle to the torque force direction
     CGFloat frontForceDirection = leftWheel.zRotation + torqueForceDirection;
     

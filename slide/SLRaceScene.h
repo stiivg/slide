@@ -10,6 +10,7 @@
 #import "HermitePath.h"
 #import "SLTruckSprite.h"
 #import "VectorUtils.h"
+#import "SLDebugControls.h"
 
 #define kMaxRoadKeyPoints 1000
 
@@ -21,8 +22,10 @@
     SKSpriteNode *drum2;
     NSArray *pivotPoints;
     CGFloat steerHeading;
+    SLDebugControls *debugControls;
 }
 @property SKNode*  debugOverlay;
+@property SLDebugControls*  controlOverlay;
 
 - (void)initPhysics;
 

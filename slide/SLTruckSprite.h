@@ -12,7 +12,6 @@
     SKSpriteNode *truckShadow;
     SKSpriteNode *leftWheel;
     SKSpriteNode *rightWheel;
-    CGFloat throttle;
     CGFloat cgBalance; //0=rear, 1=front
     
 }
@@ -31,7 +30,8 @@
 
 @property CGFloat tireStiffness;
 @property CGFloat wheelBase;
-@property CGFloat driveThrottle;
+@property CGFloat throttle;
+@property CGFloat rearGrip;
 
 -(void)steerToTarget:(CGFloat)steerHeading;
 -(void)prepareToDraw;

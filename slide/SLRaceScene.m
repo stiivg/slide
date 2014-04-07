@@ -27,6 +27,7 @@
 @implementation SLRaceScene
 
 const bool kDisplayDebug = false;
+const bool kDisplayControls = true;
 
 
 -(id)initWithSize:(CGSize)size {    
@@ -41,17 +42,7 @@ const bool kDisplayDebug = false;
         }
                 
         self.backgroundColor = [SKColor colorWithRed:0.82 green:0.57 blue:0.3 alpha:1.0]; //Sand color
-        
-        SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
-        
-        myLabel.text = @"Slide";
-        myLabel.fontSize = [SLConversion scaleFloat:15];
-
-        myLabel.position = CGPointMake(CGRectGetMidX(self.frame),
-                                       self.frame.size.height - [SLConversion scaleFloat:50]);
-        
-        [self addChild:myLabel];
-        
+                
         centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0]
                                                   size:[SLConversion scaleSize:CGSizeMake(5, 160)]];
         centerWall.position = [SLConversion convertPoint:CGPointMake(160, centerHt)];
@@ -67,11 +58,11 @@ const bool kDisplayDebug = false;
 //        }
         Circle *pivot1 = [[Circle alloc] init];
         pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+80)];
-        pivot1.radius = [SLConversion scaleFloat:30];
+        pivot1.radius = [SLConversion scaleFloat:50];
         
         Circle *pivot2 = [[Circle alloc] init];
         pivot2.centre = [SLConversion convertPoint:CGPointMake(160, centerHt-80)];
-        pivot2.radius = [SLConversion scaleFloat:30];
+        pivot2.radius = [SLConversion scaleFloat:50];
         
         pivotPoints = [NSArray arrayWithObjects:pivot1, pivot2, nil];
         
@@ -102,8 +93,17 @@ const bool kDisplayDebug = false;
             self.debugOverlay = [SKNode node];
             [self addChild:self.debugOverlay];
         }
+        
     }
     return self;
+}
+
+- (void) didMoveToView:(SKView *)view
+{
+    if (kDisplayControls) {
+        debugControls = [[SLDebugControls alloc] initWithScene:self];
+        debugControls.truck = truck;
+    }
 }
 
 -(void)initPhysics {
@@ -120,8 +120,12 @@ const bool kDisplayDebug = false;
     
     for (UITouch *touch in touches) {
         CGPoint location = [touch locationInNode:self];
-        truck.position = location;
-        [truck start];
+        if (location.x < [SLConversion scaleFloat:50] & location.y < [SLConversion scaleFloat:50]) {
+            [debugControls toggleIsShown];
+        } else {
+            truck.position = location;
+            [truck start];
+        }
     }
 }
 
