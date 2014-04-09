@@ -69,6 +69,7 @@
     rearGripSlider.maximumValue = 1.0;
     rearGripSlider.minimumValue = 0.0;
     rearGripSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
     [debugScene.view addSubview:rearGripSlider];
     
     [rearGripSlider addTarget:self action:@selector(rearGripValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -130,6 +131,8 @@
     [self addRearGripControl];
     [self addTireStiffnessControl];
     
+    [self toggleIsShown];
+    
 }
 
 
@@ -143,6 +146,12 @@
         tireStiffnessSlider.hidden = YES;
     } else {
         _isShown = YES;
+
+        rearGripSlider.value = truck.rearGrip;
+        rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.1f",truck.rearGrip];
+        tireStiffnessSlider.value = truck.tireStiffness;
+        tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",truck.tireStiffness];
+
         debugNodes.hidden = NO;
         throttleSlider.hidden = NO;
         rearGripSlider.hidden = NO;
@@ -161,12 +170,12 @@
 
 - (IBAction)rearGripValueChanged:(UISlider *)sender {
     rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.1f",sender.value];
-    truck.rearGrip = [SLConversion scaleFloat:sender.value];
+    truck.rearGrip = sender.value;
 }
 
 - (IBAction)stiffnessValueChanged:(UISlider *)sender {
     tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",sender.value];
-    truck.tireStiffness = [SLConversion scaleFloat:sender.value];
+    truck.tireStiffness = sender.value;
 }
 
 
