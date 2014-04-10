@@ -25,7 +25,6 @@
     SLDebugControls *debugControls;
 }
 @property SKNode*  debugOverlay;
-@property SLDebugControls*  controlOverlay;
 
 - (void)initPhysics;
 

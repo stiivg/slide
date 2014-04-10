@@ -19,6 +19,7 @@
     UISlider *rearGripSlider;
     SKLabelNode *tireStiffnessLabel;
     UISlider *tireStiffnessSlider;
+    UISwitch *vectorsSwitch;
 }
 
 -(id)initWithScene:(SKScene *)scene;
@@ -26,8 +27,10 @@
 -(void)toggleIsShown;
 -(void)addThrottleControl;
 -(void)addRearGripControl;
+-(void)addVectorSwitch;
 
 @property SLTruckSprite *truck;
 @property BOOL isShown;
+@property BOOL showsVectors;
 
 @end

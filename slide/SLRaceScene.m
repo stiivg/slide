@@ -26,7 +26,6 @@
 
 @implementation SLRaceScene
 
-const bool kDisplayDebug = false;
 const bool kDisplayControls = true;
 
 
@@ -88,11 +87,13 @@ const bool kDisplayControls = true;
         
         [self initPhysics];
         
-        if (kDisplayDebug) {
-            //Create debug nodes
-            self.debugOverlay = [SKNode node];
-            [self addChild:self.debugOverlay];
-        }
+        //Create debug node
+        self.debugOverlay = [SKNode node];
+//       if (self.displayVectors) {
+//            //Create debug nodes
+//            self.debugOverlay = [SKNode node];
+//            [self addChild:self.debugOverlay];
+//        }
         
     }
     return self;
@@ -305,8 +306,9 @@ const bool kDisplayControls = true;
     // Update the car shadow position
     [truck prepareToDraw];
     
+    
     //Display debug nodes
-    if (kDisplayDebug) {
+    if (debugControls.showsVectors) {
         [self addChild:self.debugOverlay];
         
         // add code to create and add debugging images to the debug node.
@@ -326,7 +328,10 @@ const bool kDisplayControls = true;
                                 length:vectorScale position:truck.rearForcePoint];
         [self debugDrawDirectionVector:truck.frontSlipAngle+truck.zRotation
                                 length:vectorScale position:truck.frontForcePoint];
+        self.view.showsPhysics = YES;
                 
+    } else {
+        self.view.showsPhysics = NO;
     }
 }
 

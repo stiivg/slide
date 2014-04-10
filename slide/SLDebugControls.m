@@ -13,6 +13,7 @@
 
 @synthesize truck;
 @synthesize isShown = _isShown;
+@synthesize showsVectors;
 
 -(id)initWithScene:(SKScene *)scene {
     if (self = [super init]) {
@@ -120,6 +121,27 @@
     
 }
 
+-(void)addVectorSwitch {
+    CGSize frameSize = debugScene.frame.size;
+    CGPoint switchLocation = CGPointMake(frameSize.width - 60, 50);
+    CGRect swFrame = {{switchLocation.x, switchLocation.y}, {100, 100}};
+    vectorsSwitch = [[UISwitch alloc] initWithFrame:swFrame];
+    [debugScene.view addSubview:vectorsSwitch];
+    
+    [vectorsSwitch addTarget:self action:@selector(vectorsSwitched:) forControlEvents:UIControlEventValueChanged];
+    
+    SKLabelNode *vectorSwLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
+    
+    vectorSwLabel.text = @"Vectors";
+    vectorSwLabel.fontSize = [SLConversion scaleFloat:10];
+    
+    vectorSwLabel.position = CGPointMake(switchLocation.x, frameSize.height - switchLocation.y);
+    
+    [debugNodes addChild:vectorSwLabel];
+    
+
+}
+
 -(void)addControls {
     
     //Create debug nodes
@@ -130,6 +152,7 @@
     [self addThrottleControl];
     [self addRearGripControl];
     [self addTireStiffnessControl];
+    [self addVectorSwitch];
     
     [self toggleIsShown];
     
@@ -144,6 +167,7 @@
         throttleSlider.hidden = YES;
         rearGripSlider.hidden = YES;
         tireStiffnessSlider.hidden = YES;
+        vectorsSwitch.hidden = YES;
     } else {
         _isShown = YES;
 
@@ -156,6 +180,7 @@
         throttleSlider.hidden = NO;
         rearGripSlider.hidden = NO;
         tireStiffnessSlider.hidden = NO;
+        vectorsSwitch.hidden = NO;
     }
 }
 
@@ -176,6 +201,10 @@
 - (IBAction)stiffnessValueChanged:(UISlider *)sender {
     tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",sender.value];
     truck.tireStiffness = sender.value;
+}
+
+- (IBAction)vectorsSwitched:(UISwitch *)sender {
+    self.showsVectors = sender.isOn;
 }
 
 
