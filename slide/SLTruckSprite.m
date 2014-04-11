@@ -81,11 +81,14 @@
     rearGrip = 0.5; //rear front balance
 
 //    CGSize size = self.size; // size is 0,0 !!
+    //Use Cener to move mass relative to node texture
+//    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(24, 29)]
+//                                                       center:CGPointMake(-10, 0)];
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
     self.physicsBody.affectedByGravity = false;
     self.physicsBody.angularDamping = 0.0;
     self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
-    CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
+//    CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
 }
 
 - (void)prepareToDraw {
