@@ -9,6 +9,8 @@
 #import "SLDebugControls.h"
 #import "SLConversion.h"
 
+#define kControlAlpha 0.4
+
 @implementation SLDebugControls
 
 @synthesize truck;
@@ -19,7 +21,6 @@
     if (self = [super init]) {
         debugScene = scene;
         [self addControls];
-        self.isShown = YES;
     }
     return self;
 }
@@ -38,6 +39,7 @@
     throttleSlider.maximumValue = 200.0;
     throttleSlider.minimumValue = 0.0;
     throttleSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    throttleSlider.alpha =kControlAlpha;
     [debugScene.view addSubview:throttleSlider];
     
     [throttleSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -51,6 +53,7 @@
     throttleLabel.position = CGPointMake(sliderLocation.x,
                                          frameSize.height - sliderLocation.y);
     
+    throttleLabel.alpha = kControlAlpha;
     
     [debugNodes addChild:throttleLabel];
     
@@ -70,6 +73,7 @@
     rearGripSlider.maximumValue = 1.0;
     rearGripSlider.minimumValue = 0.0;
     rearGripSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    rearGripSlider.alpha =kControlAlpha;
     
     [debugScene.view addSubview:rearGripSlider];
     
@@ -84,6 +88,7 @@
     rearGripLabel.position = CGPointMake(sliderLocation.x,
                                          frameSize.height - sliderLocation.y);
     
+    rearGripLabel.alpha = kControlAlpha;
     
     [debugNodes addChild:rearGripLabel];
     
@@ -103,6 +108,7 @@
     tireStiffnessSlider.maximumValue = 1200.0;
     tireStiffnessSlider.minimumValue = 0.0;
     tireStiffnessSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    tireStiffnessSlider.alpha =kControlAlpha;
     [debugScene.view addSubview:tireStiffnessSlider];
     
     [tireStiffnessSlider addTarget:self action:@selector(stiffnessValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -116,7 +122,7 @@
     tireStiffnessLabel.position = CGPointMake(sliderLocation.x,
                                          frameSize.height - sliderLocation.y);
     
-    
+    tireStiffnessLabel.alpha = kControlAlpha;
     [debugNodes addChild:tireStiffnessLabel];
     
 }
@@ -126,6 +132,8 @@
     CGPoint switchLocation = CGPointMake(frameSize.width - 60, 50);
     CGRect swFrame = {{switchLocation.x, switchLocation.y}, {100, 100}};
     vectorsSwitch = [[UISwitch alloc] initWithFrame:swFrame];
+    vectorsSwitch.alpha = kControlAlpha;
+
     [debugScene.view addSubview:vectorsSwitch];
     
     [vectorsSwitch addTarget:self action:@selector(vectorsSwitched:) forControlEvents:UIControlEventValueChanged];
@@ -137,6 +145,7 @@
     
     vectorSwLabel.position = CGPointMake(switchLocation.x, frameSize.height - switchLocation.y);
     
+    vectorSwLabel.alpha = kControlAlpha;
     [debugNodes addChild:vectorSwLabel];
     
 
@@ -153,9 +162,6 @@
     [self addRearGripControl];
     [self addTireStiffnessControl];
     [self addVectorSwitch];
-    
-    [self toggleIsShown];
-    
 }
 
 

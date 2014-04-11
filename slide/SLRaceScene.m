@@ -104,6 +104,9 @@ const bool kDisplayControls = true;
     if (kDisplayControls) {
         debugControls = [[SLDebugControls alloc] initWithScene:self];
         debugControls.truck = truck;
+        //Force toggle to turn on debug with default values
+        debugControls.isShown = NO;
+        [debugControls toggleIsShown];
     }
 }
 
@@ -317,9 +320,9 @@ const bool kDisplayControls = true;
         [self debugDrawSteeringVector];
         [self debugDrawVector:truck.physicsBody.velocity position:truck.position];
         
-        [self debugDrawVector:truck.frontTireForce position:truck.rearForcePoint];
+        [self debugDrawVector:truck.frontTireForce position:truck.frontForcePoint];
         
-        [self debugDrawVector:truck.rearTireForce position:truck.frontForcePoint];
+        [self debugDrawVector:truck.rearTireForce position:truck.rearForcePoint];
 
         [self debugDrawVector:truck.lateralForce position:truck.position];
         
