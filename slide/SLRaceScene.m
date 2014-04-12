@@ -204,10 +204,17 @@ const bool kDisplayControls = true;
     CGPoint truckPosition = truck.position;
     //determine the target pivot point
     //simplistically right side 1, left side 2
+    //Changed to delay moving to next pivot until past centre
     Circle *targetPivot = pivotPoints[0];
     if (truckPosition.x < targetPivot.centre.x) {
-        targetPivot = pivotPoints[1];
-    }
+        if (truckPosition.y < ((Circle *)pivotPoints[0]).centre.y) {
+            targetPivot = pivotPoints[1];
+        }
+    } else if (truckPosition.y < ((Circle *)pivotPoints[1]).centre.y) {
+            targetPivot = pivotPoints[1];
+        }
+
+    
     //calc target point
     //vector from truck to pivot point
     CGPoint pivotVector = CGPointMake(targetPivot.centre.x - truckPosition.x, targetPivot.centre.y - truckPosition.y);
@@ -280,7 +287,7 @@ const bool kDisplayControls = true;
 -(void)debugDrawVector:(CGVector)vector position:(CGPoint)position{
     SKShapeNode *vectorLine = [[SKShapeNode alloc] init];
     vectorLine.position = position;
-    CGFloat vectorScale = [SLConversion scaleFloat:5];
+    CGFloat vectorScale = [SLConversion scaleFloat:0.5];
     CGFloat directionX = vectorScale*vector.dx;
     CGFloat directionY = vectorScale*vector.dy;
     

@@ -20,6 +20,9 @@
     SKLabelNode *tireStiffnessLabel;
     UISlider *tireStiffnessSlider;
     UISwitch *vectorsSwitch;
+    UISwitch *pauseSwitch;
+    UISlider *sloMoSlider;
+    SKLabelNode *sloMoLabel;
 }
 
 -(id)initWithScene:(SKScene *)scene;
@@ -32,5 +35,6 @@
 @property SLTruckSprite *truck;
 @property BOOL isShown;
 @property BOOL showsVectors;
+@property CGFloat physicsSpeed;
 
 @end

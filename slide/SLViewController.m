@@ -49,6 +49,11 @@
     }
 }
 
+//Hides the top status bar with the signal, battery state...
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (BOOL)shouldAutorotate
 {
     return YES;

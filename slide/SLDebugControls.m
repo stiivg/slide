@@ -16,10 +16,12 @@
 @synthesize truck;
 @synthesize isShown = _isShown;
 @synthesize showsVectors;
+@synthesize physicsSpeed;
 
 -(id)initWithScene:(SKScene *)scene {
     if (self = [super init]) {
         debugScene = scene;
+        self.physicsSpeed = 1.0;
         [self addControls];
     }
     return self;
@@ -102,7 +104,7 @@
     CGSize sliderSize = [SLConversion scaleSize:CGSizeMake(150, 20)];
     CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 9*sliderSize.height);
     tireStiffnessSlider = [[ UISlider alloc ] initWithFrame: CGRectMake(sliderLocation.x, sliderLocation.y,
-                                                                   sliderSize.width, sliderSize.height) ];
+                                                                        sliderSize.width, sliderSize.height) ];
     tireStiffnessSlider.backgroundColor = [UIColor clearColor];
     
     tireStiffnessSlider.maximumValue = 1200.0;
@@ -120,20 +122,53 @@
     tireStiffnessLabel.fontSize = [SLConversion scaleFloat:10];
     
     tireStiffnessLabel.position = CGPointMake(sliderLocation.x,
-                                         frameSize.height - sliderLocation.y);
+                                              frameSize.height - sliderLocation.y);
     
     tireStiffnessLabel.alpha = kControlAlpha;
     [debugNodes addChild:tireStiffnessLabel];
     
 }
 
+-(void)addSloMoControl {
+    
+    CGSize frameSize = debugScene.frame.size;
+    
+    //Create control nodes
+    CGSize sliderSize = [SLConversion scaleSize:CGSizeMake(150, 20)];
+    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, sliderSize.height);
+    sloMoSlider = [[ UISlider alloc ] initWithFrame: CGRectMake(sliderLocation.x, sliderLocation.y,
+                                                                        sliderSize.width, sliderSize.height) ];
+    sloMoSlider.backgroundColor = [UIColor clearColor];
+    
+    sloMoSlider.maximumValue = 2.0;
+    sloMoSlider.minimumValue = 0.0;
+    sloMoSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    sloMoSlider.alpha =kControlAlpha;
+    [debugScene.view addSubview:sloMoSlider];
+    
+    [sloMoSlider addTarget:self action:@selector(sloMoValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    
+    sloMoLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
+    
+    sloMoLabel.text = @"SloMo";
+    sloMoLabel.fontSize = [SLConversion scaleFloat:10];
+    
+    sloMoLabel.position = CGPointMake(sliderLocation.x,
+                                              frameSize.height - sliderLocation.y);
+    
+    sloMoLabel.alpha = kControlAlpha;
+    [debugNodes addChild:sloMoLabel];
+    
+}
+
 -(void)addVectorSwitch {
     CGSize frameSize = debugScene.frame.size;
-    CGPoint switchLocation = CGPointMake(frameSize.width - 60, 50);
+    CGPoint switchLocation = CGPointMake(frameSize.width - 60, [SLConversion scaleFloat:100]);
     CGRect swFrame = {{switchLocation.x, switchLocation.y}, {100, 100}};
     vectorsSwitch = [[UISwitch alloc] initWithFrame:swFrame];
     vectorsSwitch.alpha = kControlAlpha;
-
+    
     [debugScene.view addSubview:vectorsSwitch];
     
     [vectorsSwitch addTarget:self action:@selector(vectorsSwitched:) forControlEvents:UIControlEventValueChanged];
@@ -148,7 +183,31 @@
     vectorSwLabel.alpha = kControlAlpha;
     [debugNodes addChild:vectorSwLabel];
     
+    
+}
 
+-(void)addPauseSwitch {
+    CGSize frameSize = debugScene.frame.size;
+    CGPoint switchLocation = CGPointMake(frameSize.width - 60, [SLConversion scaleFloat:50]);
+    CGRect swFrame = {{switchLocation.x, switchLocation.y}, {100, 100}};
+    pauseSwitch = [[UISwitch alloc] initWithFrame:swFrame];
+    pauseSwitch.alpha = kControlAlpha;
+    
+    [debugScene.view addSubview:pauseSwitch];
+    
+    [pauseSwitch addTarget:self action:@selector(physicsPaused:) forControlEvents:UIControlEventValueChanged];
+    
+    SKLabelNode *pauseSwLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
+    
+    pauseSwLabel.text = @"Pause";
+    pauseSwLabel.fontSize = [SLConversion scaleFloat:10];
+    
+    pauseSwLabel.position = CGPointMake(switchLocation.x, frameSize.height - switchLocation.y);
+    
+    pauseSwLabel.alpha = kControlAlpha;
+    [debugNodes addChild:pauseSwLabel];
+    
+    
 }
 
 -(void)addControls {
@@ -162,6 +221,8 @@
     [self addRearGripControl];
     [self addTireStiffnessControl];
     [self addVectorSwitch];
+    [self addPauseSwitch];
+    [self addSloMoControl];
 }
 
 
@@ -174,6 +235,8 @@
         rearGripSlider.hidden = YES;
         tireStiffnessSlider.hidden = YES;
         vectorsSwitch.hidden = YES;
+        pauseSwitch.hidden = YES;
+        sloMoSlider.hidden = YES;
     } else {
         _isShown = YES;
 
@@ -181,12 +244,16 @@
         rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.1f",truck.rearGrip];
         tireStiffnessSlider.value = truck.tireStiffness;
         tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",truck.tireStiffness];
+        sloMoSlider.value = self.physicsSpeed;
+        sloMoLabel.text =[NSString stringWithFormat:@"SloMo %2.1f",self.physicsSpeed];
 
         debugNodes.hidden = NO;
         throttleSlider.hidden = NO;
         rearGripSlider.hidden = NO;
         tireStiffnessSlider.hidden = NO;
         vectorsSwitch.hidden = NO;
+        pauseSwitch.hidden = NO;
+        sloMoSlider.hidden = NO;
     }
 }
 
@@ -209,8 +276,22 @@
     truck.tireStiffness = sender.value;
 }
 
+- (IBAction)sloMoValueChanged:(UISlider *)sender {
+    sloMoLabel.text = [NSString stringWithFormat:@"SloMo %2.1f",sender.value];
+    self.physicsSpeed = sender.value;
+    debugScene.physicsWorld.speed = self.physicsSpeed;
+}
+
 - (IBAction)vectorsSwitched:(UISwitch *)sender {
     self.showsVectors = sender.isOn;
+}
+
+- (IBAction)physicsPaused:(UISwitch *)sender {
+    if (sender.isOn) {
+        debugScene.physicsWorld.speed = 0.0;
+    } else {
+        debugScene.physicsWorld.speed = self.physicsSpeed;
+    }
 }
 
 
