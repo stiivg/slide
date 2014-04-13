@@ -86,7 +86,7 @@
 //                                                       center:CGPointMake(-10, 0)];
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
     self.physicsBody.affectedByGravity = false;
-    self.physicsBody.angularDamping = 0.0;
+    self.physicsBody.angularDamping = 0.5;
     self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
 //    CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
 }
@@ -152,31 +152,34 @@
 
 
 -(void)applyForces {
-    //calc the truck side slip angle - angle of truck heading to velocity direction
-    //truck heading +CCW from velocity heading
+    //calc the truck side slip angle - angle of velocity direction to truck heading
+    //velocity heading +CCW from truck heading
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
     CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
     sideSlipAngle = [self convertAngle:sideSlipAngle];
-    
+
+    BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
+
     //calc the rear rotational slip angle
     CGFloat angVel = self.physicsBody.angularVelocity;
     CGFloat wc = angVel * (1-kCGBalance)*wheelBase;
-    rearSlipAngle = (sinf(sideSlipAngle) - wc) / fabsf(cosf(sideSlipAngle));
+    rearSlipAngle = (sinf(sideSlipAngle) - wc) / cosf(sideSlipAngle);
     rearSlipAngle = atanf(rearSlipAngle);
     
     CGFloat wb = angVel * kCGBalance * wheelBase;
     
-    BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
 //    frontSlipAngle = (sinf(sideSlipAngle) - wb) / fabsf(cosf(sideSlipAngle)) + leftWheel.zRotation;
-    frontSlipAngle = (sinf(sideSlipAngle) + wb) / fabsf(cosf(sideSlipAngle));
+    frontSlipAngle = (sinf(sideSlipAngle) + wb) / cosf(sideSlipAngle);
     frontSlipAngle = atanf(frontSlipAngle);
-    CGFloat frontSlipSteerAngle;
+
     if (reversing) {
-        frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
-    } else {
-        frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
+        rearSlipAngle = -rearSlipAngle;
+        frontSlipAngle = -frontSlipAngle;
     }
+
+    CGFloat frontSlipSteerAngle;
+    frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
     
     //calc the rear scrub force
     CGFloat rearScrubForce = tireStiffness*rearSlipAngle;
@@ -187,7 +190,7 @@
     }
     rearScrubForce = self.rearGrip*[SLConversion scaleFloat:rearScrubForce]; //apply rear grip
     
-    //truck y direction
+    //truck -y direction direction of force for +ve scrub angle
     CGFloat torqueForceDirection = self.zRotation - M_PI_2;
     
     //apply the rear torque force in truck y direction only
