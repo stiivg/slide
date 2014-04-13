@@ -152,20 +152,31 @@
 
 
 -(void)applyForces {
-    //calc the truck side slip angle
+    //calc the truck side slip angle - angle of truck heading to velocity direction
+    //truck heading +CCW from velocity heading
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
-    CGFloat sideSlipAngle = self.zRotation - velocityAngle; //angle of truck to direction of travel
+    CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
     sideSlipAngle = [self convertAngle:sideSlipAngle];
     
     //calc the rear rotational slip angle
     CGFloat angVel = self.physicsBody.angularVelocity;
     CGFloat wc = angVel * (1-kCGBalance)*wheelBase;
-    rearSlipAngle = (sinf(sideSlipAngle) + wc) / fabsf(cosf(sideSlipAngle));
+    rearSlipAngle = (sinf(sideSlipAngle) - wc) / fabsf(cosf(sideSlipAngle));
+    rearSlipAngle = atanf(rearSlipAngle);
     
     CGFloat wb = angVel * kCGBalance * wheelBase;
-    frontSlipAngle = (sinf(sideSlipAngle) - wb) / fabsf(cosf(sideSlipAngle)) + leftWheel.zRotation;
     
+    BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
+//    frontSlipAngle = (sinf(sideSlipAngle) - wb) / fabsf(cosf(sideSlipAngle)) + leftWheel.zRotation;
+    frontSlipAngle = (sinf(sideSlipAngle) + wb) / fabsf(cosf(sideSlipAngle));
+    frontSlipAngle = atanf(frontSlipAngle);
+    CGFloat frontSlipSteerAngle;
+    if (reversing) {
+        frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
+    } else {
+        frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
+    }
     
     //calc the rear scrub force
     CGFloat rearScrubForce = tireStiffness*rearSlipAngle;
@@ -177,7 +188,7 @@
     rearScrubForce = self.rearGrip*[SLConversion scaleFloat:rearScrubForce]; //apply rear grip
     
     //truck y direction
-    CGFloat torqueForceDirection = self.zRotation + M_PI_2;
+    CGFloat torqueForceDirection = self.zRotation - M_PI_2;
     
     //apply the rear torque force in truck y direction only
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
@@ -189,7 +200,7 @@
     [self.physicsBody applyForce:rearTireForce atPoint:rearForcePoint];
     
     //calc the front scrub force
-    CGFloat frontScrubForce = tireStiffness*frontSlipAngle;
+    CGFloat frontScrubForce = tireStiffness*frontSlipSteerAngle;
     if (frontSlipAngle > kTireAngleMaxLinear) {
         frontScrubForce = tireStiffness*kTireAngleMaxLinear;
     } else if (frontSlipAngle < -kTireAngleMaxLinear) {
