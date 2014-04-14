@@ -14,6 +14,7 @@
 #define kTireAngleMaxLinear 0.9 //Maximum angle with linear tire scrub force
 
 #define kCGBalance 0.5
+#define kDebugPrint NO
 
 
 @implementation SLTruckSprite
@@ -64,6 +65,15 @@
         self.zRotation = M_PI_2;
         
         throttle = 0.0;  //idling
+        
+        //open debug file
+        if (kDebugPrint) {
+            NSString *filePath = @"/Users/stevengallagher/Documents/SlideGame/slide/debug.tsv";
+            debugFile = fopen([filePath cStringUsingEncoding:NSUTF8StringEncoding], "w");
+            fprintf(debugFile, "velAngle\tsideSlip\twSpeed\twc\trearSlipAngle\twb\tfrontSlipAngle\tFrontSteer\tReversing\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
+            
+        }
+
         
         return self;
     } else
@@ -137,9 +147,9 @@
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velLength = sqrtf(velocity.dx * velocity.dx + velocity.dy * velocity.dy);
     
-    if (velLength > 1.0) {
+//    if (velLength > 1.0) {
         [self applyForces];
-    }
+//    }
 }
 
 -(void)applyEngineForce {
@@ -221,9 +231,11 @@
                                   self.position.y+frontDistance*sinf(self.zRotation));
     [self.physicsBody applyForce:frontTireForce atPoint:frontForcePoint];
     
+    if (kDebugPrint) {
+        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocityAngle, sideSlipAngle, angVel, wc, rearSlipAngle, wb, frontSlipAngle,frontSlipSteerAngle,reversing,
+                rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
+    }
 }
-
-
 
 
 

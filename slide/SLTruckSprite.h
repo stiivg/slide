@@ -13,6 +13,7 @@
     SKSpriteNode *leftWheel;
     SKSpriteNode *rightWheel;
     CGFloat cgBalance; //0=rear, 1=front
+    FILE *debugFile;
     
 }
 //+CCW relative to truck heading
