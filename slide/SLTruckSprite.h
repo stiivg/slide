@@ -26,7 +26,6 @@
 @property CGPoint rearForcePoint;
 @property CGPoint frontForcePoint;
 
-@property CGVector lateralForce;
 @property SKNode*  debugOverlay;
 
 @property CGFloat tireStiffness;

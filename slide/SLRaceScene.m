@@ -330,8 +330,6 @@ const bool kDisplayControls = true;
         [self debugDrawVector:truck.frontTireForce position:truck.frontForcePoint];
         
         [self debugDrawVector:truck.rearTireForce position:truck.rearForcePoint];
-
-        [self debugDrawVector:truck.lateralForce position:truck.position];
         
         CGFloat vectorScale = [SLConversion scaleFloat:25];
         [self debugDrawDirectionVector:truck.rearSlipAngle+truck.zRotation

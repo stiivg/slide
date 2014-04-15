@@ -23,7 +23,6 @@
 @synthesize frontSlipAngle;
 @synthesize rearTireForce;
 @synthesize frontTireForce;
-@synthesize lateralForce;
 @synthesize rearForcePoint;
 @synthesize frontForcePoint;
 @synthesize tireStiffness;
@@ -147,9 +146,9 @@
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velLength = sqrtf(velocity.dx * velocity.dx + velocity.dy * velocity.dy);
     
-//    if (velLength > 1.0) {
+    if (velLength > 1.0) {
         [self applyForces];
-//    }
+    }
 }
 
 -(void)applyEngineForce {
@@ -158,6 +157,37 @@
     CGVector engineVector = CGVectorMake(throttle*cosf(truckDirection),
                                          throttle*sinf(truckDirection));
     [self.physicsBody applyForce:engineVector];
+}
+
+-(CGFloat)calcSlipAngle:(CGFloat)sideSlipAngle cgDistance:(CGFloat)distance {
+    CGFloat angVel = self.physicsBody.angularVelocity;
+    CGFloat wSpeed = angVel * distance;
+    CGFloat slipAngle = (sinf(sideSlipAngle) + wSpeed) / fabsf(cosf(sideSlipAngle));
+    slipAngle = atanf(slipAngle);
+    return slipAngle;
+}
+
+
+-(CGFloat)calcScrubForce:(CGFloat)slipAngle tireGrip:(CGFloat)grip {
+    CGFloat scrubForce = tireStiffness*slipAngle;
+    if (slipAngle > kTireAngleMaxLinear) {
+        scrubForce = tireStiffness*kTireAngleMaxLinear;
+    } else if (slipAngle < -kTireAngleMaxLinear) {
+        scrubForce = -tireStiffness*kTireAngleMaxLinear;
+    }
+    scrubForce = grip*[SLConversion scaleFloat:scrubForce]; //apply grip
+
+    return scrubForce;
+}
+
+//All physics forces are in scene coordinates for force vector and position
+//Use truck position and rotation to apply force in the correct position on the truck
+-(CGPoint)applyTireForce:(CGVector)tireForce cgDistance:(CGFloat)cgDistance{
+    cgDistance = [SLConversion scaleFloat:cgDistance];
+    CGPoint forcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
+                                 self.position.y+cgDistance*sinf(self.zRotation));
+    [self.physicsBody applyForce:tireForce atPoint:forcePoint];
+    return forcePoint;
 }
 
 
@@ -169,18 +199,12 @@
     CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
     sideSlipAngle = [self convertAngle:sideSlipAngle];
     
-    //calc the rear rotational slip angle
-    CGFloat angVel = self.physicsBody.angularVelocity;
-    CGFloat wc = angVel * (1-kCGBalance)*wheelBase;
-    rearSlipAngle = (sinf(sideSlipAngle) - wc) / fabsf(cosf(sideSlipAngle));
-    rearSlipAngle = atanf(rearSlipAngle);
     
-    CGFloat wb = angVel * kCGBalance * wheelBase;
+    rearSlipAngle = [self calcSlipAngle:sideSlipAngle cgDistance:(kCGBalance-1)*wheelBase];
+    frontSlipAngle = [self calcSlipAngle:sideSlipAngle cgDistance:kCGBalance*wheelBase];
     
+    //apply steering to front slip angle
     BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
-//    frontSlipAngle = (sinf(sideSlipAngle) - wb) / fabsf(cosf(sideSlipAngle)) + leftWheel.zRotation;
-    frontSlipAngle = (sinf(sideSlipAngle) + wb) / fabsf(cosf(sideSlipAngle));
-    frontSlipAngle = atanf(frontSlipAngle);
     CGFloat frontSlipSteerAngle;
     if (reversing) {
         frontSlipSteerAngle = -(frontSlipAngle + leftWheel.zRotation);
@@ -188,14 +212,7 @@
         frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
     }
     
-    //calc the rear scrub force
-    CGFloat rearScrubForce = tireStiffness*rearSlipAngle;
-    if (rearSlipAngle > kTireAngleMaxLinear) {
-        rearScrubForce = tireStiffness*kTireAngleMaxLinear;
-    } else if (rearSlipAngle < -kTireAngleMaxLinear) {
-        rearScrubForce = -tireStiffness*kTireAngleMaxLinear;
-    }
-    rearScrubForce = self.rearGrip*[SLConversion scaleFloat:rearScrubForce]; //apply rear grip
+    CGFloat rearScrubForce = [self calcScrubForce:rearSlipAngle tireGrip:self.rearGrip];
     
     //truck y direction
     CGFloat torqueForceDirection = self.zRotation - M_PI_2;
@@ -204,19 +221,11 @@
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
                                          rearScrubForce*sinf(torqueForceDirection));
 
-    CGFloat rearDistance = [SLConversion scaleFloat:24];
-    rearForcePoint = CGPointMake(self.position.x-rearDistance*cosf(self.zRotation),
-                                 self.position.y-rearDistance*sinf(self.zRotation));
-    [self.physicsBody applyForce:rearTireForce atPoint:rearForcePoint];
+    rearForcePoint = [self applyTireForce:rearTireForce cgDistance:-24];
     
     //calc the front scrub force
-    CGFloat frontScrubForce = tireStiffness*frontSlipSteerAngle;
-    if (frontSlipAngle > kTireAngleMaxLinear) {
-        frontScrubForce = tireStiffness*kTireAngleMaxLinear;
-    } else if (frontSlipAngle < -kTireAngleMaxLinear) {
-        frontScrubForce = -tireStiffness*kTireAngleMaxLinear;
-    }
-    frontScrubForce = (1 - self.rearGrip)*[SLConversion scaleFloat:frontScrubForce];
+    CGFloat frontScrubForce = [self calcScrubForce:frontSlipSteerAngle tireGrip:1 - self.rearGrip];
+    
     //Add the steering angle to the torque force direction
     CGFloat frontForceDirection = leftWheel.zRotation + torqueForceDirection;
     
@@ -224,17 +233,13 @@
     frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
                                   frontScrubForce*sinf(frontForceDirection));
     
-    //All physics forces are in scene coordinates for force vector and position
-    //Use truck position and rotation to apply force in the correct position on the truck
-    CGFloat frontDistance = [SLConversion scaleFloat:24];
-    frontForcePoint = CGPointMake(self.position.x+frontDistance*cosf(self.zRotation),
-                                  self.position.y+frontDistance*sinf(self.zRotation));
-    [self.physicsBody applyForce:frontTireForce atPoint:frontForcePoint];
+    frontForcePoint = [self applyTireForce:frontTireForce cgDistance:24];
+
     
-    if (kDebugPrint) {
-        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocityAngle, sideSlipAngle, angVel, wc, rearSlipAngle, wb, frontSlipAngle,frontSlipSteerAngle,reversing,
-                rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
-    }
+//    if (kDebugPrint) {
+//        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocityAngle, sideSlipAngle, angVel, wc, rearSlipAngle, wb, frontSlipAngle,frontSlipSteerAngle,reversing,
+//                rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
+//    }
 }
 
 
