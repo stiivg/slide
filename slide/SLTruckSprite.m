@@ -69,7 +69,7 @@
         if (kDebugPrint) {
             NSString *filePath = @"/Users/stevengallagher/Documents/SlideGame/slide/debug.tsv";
             debugFile = fopen([filePath cStringUsingEncoding:NSUTF8StringEncoding], "w");
-            fprintf(debugFile, "velAngle\tsideSlip\twSpeed\twc\trearSlipAngle\twb\tfrontSlipAngle\tFrontSteer\tReversing\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
+            fprintf(debugFile, "velX\tvelY\tvelAngle\tsideSlip\twSpeed\trearSlipAngle\tfrontSlipAngle\tFrontSteer\tReversing\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
             
         }
 
@@ -221,7 +221,10 @@
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
                                          rearScrubForce*sinf(torqueForceDirection));
 
-    rearForcePoint = [self applyTireForce:rearTireForce cgDistance:-24];
+//    rearForcePoint = [self applyTireForce:rearTireForce cgDistance:-24];
+    CGFloat cgDistance = [SLConversion scaleFloat:-24];
+    rearForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
+                                     self.position.y+cgDistance*sinf(self.zRotation));
     
     //calc the front scrub force
     CGFloat frontScrubForce = [self calcScrubForce:frontSlipSteerAngle tireGrip:1 - self.rearGrip];
@@ -233,13 +236,46 @@
     frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
                                   frontScrubForce*sinf(frontForceDirection));
     
-    frontForcePoint = [self applyTireForce:frontTireForce cgDistance:24];
+//    frontForcePoint = [self applyTireForce:frontTireForce cgDistance:24];
+    cgDistance = [SLConversion scaleFloat:24];
+    frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
+                                 self.position.y+cgDistance*sinf(self.zRotation));
 
+    //scale the forces to prevent zero crossing of velocity
+    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
+    CGFloat maxForceX = velocity.dx * -15;
+    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
+
+    CGFloat maxForceY = velocity.dy * -15;
+    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
+    CGFloat forceScale = 1;
+    if (forceScaleX <0) {
+        forceScale = forceScaleY;
+    } else if (forceScaleY<0) {
+        forceScale = forceScaleX;
+    }
+    if (forceScaleX > 0 & forceScaleY > 0) {
+        forceScale = fminf(forceScaleX, forceScaleY);
+    }
     
-//    if (kDebugPrint) {
-//        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocityAngle, sideSlipAngle, angVel, wc, rearSlipAngle, wb, frontSlipAngle,frontSlipSteerAngle,reversing,
-//                rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
-//    }
+    if (0 < forceScale & forceScale <=1) {
+        rearTireForce.dx = rearTireForce.dx * forceScale;
+        rearTireForce.dy = rearTireForce.dy * forceScale;
+        
+        frontTireForce.dx = frontTireForce.dx * forceScale;
+        frontTireForce.dy = frontTireForce.dy * forceScale;
+    }
+
+
+    [self.physicsBody applyForce:rearTireForce atPoint:rearForcePoint];
+    [self.physicsBody applyForce:frontTireForce atPoint:frontForcePoint];
+
+    if (kDebugPrint) {
+        CGFloat angVel = self.physicsBody.angularVelocity;
+        
+        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocity.dx,velocity.dy, velocityAngle, sideSlipAngle, angVel, rearSlipAngle, frontSlipAngle,frontSlipSteerAngle,reversing,
+                rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
+    }
 }
 
 
