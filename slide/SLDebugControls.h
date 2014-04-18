@@ -19,6 +19,8 @@
     UISlider *rearGripSlider;
     SKLabelNode *tireStiffnessLabel;
     UISlider *tireStiffnessSlider;
+    SKLabelNode *wheelbasLabel;
+    UISlider *wheelbaseSlider;
     UISwitch *vectorsSwitch;
     UISwitch *pauseSwitch;
     UISlider *sloMoSlider;

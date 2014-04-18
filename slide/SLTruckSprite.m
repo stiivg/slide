@@ -95,7 +95,7 @@
 //                                                       center:CGPointMake(-10, 0)];
     self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
     self.physicsBody.affectedByGravity = false;
-    self.physicsBody.angularDamping = 0.5;
+    self.physicsBody.angularDamping = 0.1;
     self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
 //    CGFloat masstest =  self.physicsBody.mass; //was 0.247466668
 }

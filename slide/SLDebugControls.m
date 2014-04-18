@@ -67,7 +67,7 @@
     
     //Create control nodes
     CGSize sliderSize = [SLConversion scaleSize:CGSizeMake(150, 20)];
-    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 6*sliderSize.height);
+    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 5*sliderSize.height);
     rearGripSlider = [[ UISlider alloc ] initWithFrame: CGRectMake(sliderLocation.x, sliderLocation.y,
                                                                    sliderSize.width, sliderSize.height) ];
     rearGripSlider.backgroundColor = [UIColor clearColor];
@@ -102,12 +102,12 @@
     
     //Create control nodes
     CGSize sliderSize = [SLConversion scaleSize:CGSizeMake(150, 20)];
-    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 9*sliderSize.height);
+    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 7*sliderSize.height);
     tireStiffnessSlider = [[ UISlider alloc ] initWithFrame: CGRectMake(sliderLocation.x, sliderLocation.y,
                                                                         sliderSize.width, sliderSize.height) ];
     tireStiffnessSlider.backgroundColor = [UIColor clearColor];
     
-    tireStiffnessSlider.maximumValue = 1200.0;
+    tireStiffnessSlider.maximumValue = 2000.0;
     tireStiffnessSlider.minimumValue = 0.0;
     tireStiffnessSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     tireStiffnessSlider.alpha =kControlAlpha;
@@ -126,6 +126,39 @@
     
     tireStiffnessLabel.alpha = kControlAlpha;
     [debugNodes addChild:tireStiffnessLabel];
+    
+}
+
+-(void)addWheelbaseControl {
+    
+    CGSize frameSize = debugScene.frame.size;
+    
+    //Create control nodes
+    CGSize sliderSize = [SLConversion scaleSize:CGSizeMake(150, 20)];
+    CGPoint sliderLocation = CGPointMake(frameSize.width - sliderSize.width, frameSize.height - 9*sliderSize.height);
+    wheelbaseSlider = [[ UISlider alloc ] initWithFrame: CGRectMake(sliderLocation.x, sliderLocation.y,
+                                                                        sliderSize.width, sliderSize.height) ];
+    wheelbaseSlider.backgroundColor = [UIColor clearColor];
+    
+    wheelbaseSlider.maximumValue = 0.5;
+    wheelbaseSlider.minimumValue = 0.1;
+    wheelbaseSlider.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    wheelbaseSlider.alpha =kControlAlpha;
+    [debugScene.view addSubview:wheelbaseSlider];
+    
+    [wheelbaseSlider addTarget:self action:@selector(wheelbaseValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    
+    wheelbasLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
+    
+    wheelbasLabel.text = @"Wheelbase";
+    wheelbasLabel.fontSize = [SLConversion scaleFloat:10];
+    
+    wheelbasLabel.position = CGPointMake(sliderLocation.x,
+                                              frameSize.height - sliderLocation.y);
+    
+    wheelbasLabel.alpha = kControlAlpha;
+    [debugNodes addChild:wheelbasLabel];
     
 }
 
@@ -220,6 +253,7 @@
     [self addThrottleControl];
     [self addRearGripControl];
     [self addTireStiffnessControl];
+    [self addWheelbaseControl];
     [self addVectorSwitch];
     [self addPauseSwitch];
     [self addSloMoControl];
@@ -234,6 +268,7 @@
         throttleSlider.hidden = YES;
         rearGripSlider.hidden = YES;
         tireStiffnessSlider.hidden = YES;
+        wheelbaseSlider.hidden = YES;
         vectorsSwitch.hidden = YES;
         pauseSwitch.hidden = YES;
         sloMoSlider.hidden = YES;
@@ -241,9 +276,11 @@
         _isShown = YES;
 
         rearGripSlider.value = truck.rearGrip;
-        rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.1f",truck.rearGrip];
+        rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.2f",truck.rearGrip];
         tireStiffnessSlider.value = truck.tireStiffness;
         tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",truck.tireStiffness];
+        wheelbaseSlider.value = truck.wheelBase;
+        wheelbasLabel.text = [NSString stringWithFormat:@"Wheelbase %2.2f",truck.wheelBase];
         sloMoSlider.value = self.physicsSpeed;
         sloMoLabel.text =[NSString stringWithFormat:@"SloMo %2.1f",self.physicsSpeed];
 
@@ -251,6 +288,7 @@
         throttleSlider.hidden = NO;
         rearGripSlider.hidden = NO;
         tireStiffnessSlider.hidden = NO;
+        wheelbaseSlider.hidden = NO;
         vectorsSwitch.hidden = NO;
         pauseSwitch.hidden = NO;
         sloMoSlider.hidden = NO;
@@ -267,13 +305,18 @@
 
 
 - (IBAction)rearGripValueChanged:(UISlider *)sender {
-    rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.1f",sender.value];
+    rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.2f",sender.value];
     truck.rearGrip = sender.value;
 }
 
 - (IBAction)stiffnessValueChanged:(UISlider *)sender {
     tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",sender.value];
     truck.tireStiffness = sender.value;
+}
+
+- (IBAction)wheelbaseValueChanged:(UISlider *)sender {
+    wheelbasLabel.text = [NSString stringWithFormat:@"Wheelbase %2.2f",sender.value];
+    truck.wheelBase = sender.value;
 }
 
 - (IBAction)sloMoValueChanged:(UISlider *)sender {
