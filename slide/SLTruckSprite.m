@@ -85,9 +85,9 @@
  The tire scrub and engine forces are x2 for iPad
  */
 - (void)initPhysics {
-    wheelBase = 0.14;
-    tireStiffness = 400;
-    rearGrip = 0.5; //rear front balance
+    wheelBase = 0.19;
+    tireStiffness = 1573;
+    rearGrip = 0.25; //rear front balance
 
 //    CGSize size = self.size; // size is 0,0 !!
     //Use Cener to move mass relative to node texture
@@ -167,16 +167,23 @@
     return slipAngle;
 }
 
-
+/* 
+ Convert the angle the tire is scrubbing over the ground to a scrub force
+ magnitude. The scrub force is applied perpendicular to the rolling direction.
+ Grip is used to proportion the front and rear scrub force.
+ */
 -(CGFloat)calcScrubForce:(CGFloat)slipAngle tireGrip:(CGFloat)grip {
-    CGFloat scrubForce = tireStiffness*slipAngle;
-    if (slipAngle > kTireAngleMaxLinear) {
-        scrubForce = tireStiffness*kTireAngleMaxLinear;
-    } else if (slipAngle < -kTireAngleMaxLinear) {
-        scrubForce = -tireStiffness*kTireAngleMaxLinear;
+    CGFloat scrubForce = tireStiffness;
+    if(slipAngle < 0 ) {
+        scrubForce = -tireStiffness;
     }
-    scrubForce = grip*[SLConversion scaleFloat:scrubForce]; //apply grip
+    
+    if(fabsf(slipAngle) < kTireAngleMaxLinear) {
+        scrubForce = (slipAngle / kTireAngleMaxLinear) * tireStiffness;
+    }
 
+    scrubForce = grip*[SLConversion scaleFloat:scrubForce]; //apply grip
+    
     return scrubForce;
 }
 
