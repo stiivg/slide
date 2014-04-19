@@ -146,7 +146,7 @@
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velLength = sqrtf(velocity.dx * velocity.dx + velocity.dy * velocity.dy);
     
-    if (velLength > 1.0) {
+    if (velLength > 0.0) {
         [self applyForces];
     }
 }
@@ -248,30 +248,30 @@
     frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
-    //scale the forces to prevent zero crossing of velocity
-    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
-    CGFloat maxForceX = velocity.dx * -15;
-    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
-
-    CGFloat maxForceY = velocity.dy * -15;
-    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
-    CGFloat forceScale = 1;
-    if (forceScaleX <0) {
-        forceScale = forceScaleY;
-    } else if (forceScaleY<0) {
-        forceScale = forceScaleX;
-    }
-    if (forceScaleX > 0 & forceScaleY > 0) {
-        forceScale = fminf(forceScaleX, forceScaleY);
-    }
-    
-    if (0 < forceScale & forceScale <=1) {
-        rearTireForce.dx = rearTireForce.dx * forceScale;
-        rearTireForce.dy = rearTireForce.dy * forceScale;
-        
-        frontTireForce.dx = frontTireForce.dx * forceScale;
-        frontTireForce.dy = frontTireForce.dy * forceScale;
-    }
+//    //scale the forces to prevent zero crossing of velocity
+//    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
+//    CGFloat maxForceX = velocity.dx * -15;
+//    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
+//
+//    CGFloat maxForceY = velocity.dy * -15;
+//    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
+//    CGFloat forceScale = 1;
+//    if (forceScaleX <0) {
+//        forceScale = forceScaleY;
+//    } else if (forceScaleY<0) {
+//        forceScale = forceScaleX;
+//    }
+//    if (forceScaleX > 0 & forceScaleY > 0) {
+//        forceScale = fminf(forceScaleX, forceScaleY);
+//    }
+//    
+//    if (0 < forceScale & forceScale <=1) {
+//        rearTireForce.dx = rearTireForce.dx * forceScale;
+//        rearTireForce.dy = rearTireForce.dy * forceScale;
+//        
+//        frontTireForce.dx = frontTireForce.dx * forceScale;
+//        frontTireForce.dy = frontTireForce.dy * forceScale;
+//    }
 
 
     [self.physicsBody applyForce:rearTireForce atPoint:rearForcePoint];

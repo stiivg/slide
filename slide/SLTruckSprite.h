@@ -14,6 +14,8 @@
     SKSpriteNode *rightWheel;
     CGFloat cgBalance; //0=rear, 1=front
     FILE *debugFile;
+    CGVector lastVelocity;
+    CGFloat lastAngularVelocity;
     
 }
 //+CCW relative to truck heading
