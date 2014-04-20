@@ -17,7 +17,7 @@
                BlueprintIdentifier = "645CE48318CD2C7300CBF980"
                BuildableName = "Slide.app"
                BlueprintName = "slide"
-               ReferencedContainer = "container:Slide.xcodeproj">
+               ReferencedContainer = "container:slide.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "645CE4AE18CD2C7300CBF980"
                BuildableName = "SlideTests.xctest"
                BlueprintName = "slide_tests"
-               ReferencedContainer = "container:Slide.xcodeproj">
+               ReferencedContainer = "container:slide.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.app"
             BlueprintName = "slide"
-            ReferencedContainer = "container:Slide.xcodeproj">
+            ReferencedContainer = "container:slide.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.app"
             BlueprintName = "slide"
-            ReferencedContainer = "container:Slide.xcodeproj">
+            ReferencedContainer = "container:slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -82,7 +82,7 @@
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
             BuildableName = "Slide.app"
             BlueprintName = "slide"
-            ReferencedContainer = "container:Slide.xcodeproj">
+            ReferencedContainer = "container:slide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
