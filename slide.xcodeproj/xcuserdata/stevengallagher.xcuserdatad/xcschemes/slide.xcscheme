@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-               BuildableName = "Slide.temp_caseinsensitive_rename.app"
+               BuildableName = "Slide.app"
                BlueprintName = "slide"
                ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "645CE4AE18CD2C7300CBF980"
-               BuildableName = "Slide.temp_caseinsensitive_renameTests.xctest"
+               BuildableName = "SlideTests.xctest"
                BlueprintName = "slide_tests"
                ReferencedContainer = "container:Slide.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BuildableName = "Slide.app"
             BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BuildableName = "Slide.app"
             BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "645CE48318CD2C7300CBF980"
-            BuildableName = "Slide.temp_caseinsensitive_rename.app"
+            BuildableName = "Slide.app"
             BlueprintName = "slide"
             ReferencedContainer = "container:Slide.xcodeproj">
          </BuildableReference>

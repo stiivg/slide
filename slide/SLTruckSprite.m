@@ -170,7 +170,7 @@
         [self applySteering:sideSlipAngle];
         
         //Keep rotating until at max steer slide
-        if (sideSlipAngle < kMaxSteerAngle) {
+        if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
             [self.physicsBody applyTorque:0.1];
         }
         
