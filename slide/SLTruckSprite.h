@@ -15,9 +15,17 @@
     CGFloat cgBalance; //0=rear, 1=front
     FILE *debugFile;
     CGVector lastVelocity;
-    CGFloat lastAngularVelocity;
-    
+    CGFloat lastAngularVelocity;    
 }
+
+typedef NS_ENUM(NSUInteger, SlideState) {
+    NotSliding,
+    Initiating,
+    Maintaining,
+    Recovering
+    
+};
+
 //+CCW relative to truck heading
 @property CGFloat rearSlipAngle;
 @property CGFloat frontSlipAngle;
@@ -34,7 +42,10 @@
 @property CGFloat wheelBase;
 @property CGFloat throttle;
 @property CGFloat rearGrip;
+@property SlideState sliding;
 
+-(void)startSlide;
+-(void)endSlide;
 -(void)steerToTarget:(CGFloat)steerHeading;
 -(void)prepareToDraw;
 -(void)initPhysics;

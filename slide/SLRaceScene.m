@@ -47,14 +47,6 @@ const bool kDisplayControls = true;
         centerWall.position = [SLConversion convertPoint:CGPointMake(160, centerHt)];
         [self addChild:centerWall];
         
-//        HermitePath *hPath = [[HermitePath alloc] init];
-//        [hPath createPath:pathPoints];
-//        //debug draw the path points
-//        for (int i=0; i<300; i++) {
-//            SKSpriteNode *dot = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(2, 2)];
-//            dot.position = pathPoints[i];
-//            [self addChild:dot];
-//        }
         Circle *pivot1 = [[Circle alloc] init];
         pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+80)];
         pivot1.radius = [SLConversion scaleFloat:50];
@@ -77,7 +69,12 @@ const bool kDisplayControls = true;
         drum2.name = @"Drum2";
         drum2.position = pivot2.centre;
         [self addChild:drum2];
-        
+                
+        slideButton = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.62 green:0.37 blue:0.2 alpha:1.0]
+                                                  size:[SLConversion scaleSize:CGSizeMake(50, 50)]];
+        slideButton.position = [SLConversion convertPoint:CGPointMake(290, centerHt)];
+        [self addChild:slideButton];
+
         //Create the player truck
         truck = [[SLTruckSprite alloc] init];
         
@@ -126,11 +123,23 @@ const bool kDisplayControls = true;
         CGPoint location = [touch locationInNode:self];
         if (location.x < [SLConversion scaleFloat:50] & location.y < [SLConversion scaleFloat:50]) {
             [debugControls toggleIsShown];
+        } else if([slideButton containsPoint:location]){
+            [truck startSlide];
         } else {
             truck.position = location;
             [truck start];
         }
     }
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    for (UITouch *touch in touches) {
+        CGPoint location = [touch locationInNode:self];
+        if([slideButton containsPoint:location]){
+            [truck endSlide];
+        }
+    }
+    
 }
 
 //From http://paulbourke.net/geometry/circlesphere/CircleCircleIntersection2.m
@@ -200,7 +209,6 @@ const bool kDisplayControls = true;
     [self.debugOverlay removeAllChildren];
     
     //Calculate the target point and set the steer heading
-    CGVector truckVelocity = truck.physicsBody.velocity;
     CGPoint truckPosition = truck.position;
     //determine the target pivot point
     //simplistically right side 1, left side 2
@@ -238,7 +246,7 @@ const bool kDisplayControls = true;
         carPivotCircle.centre = ccpAdd(truckPosition, ccpMult(pivotVector, 0.5));
         carPivotCircle.radius = pivotDistance/2;
 
-        int result = [self findIntersectionOfCircle:targetPivot circle:carPivotCircle sol1:&target1 sol2:&target2];
+        [self findIntersectionOfCircle:targetPivot circle:carPivotCircle sol1:&target1 sol2:&target2];
         //Assume target2 for now
         //Steer towards target2
         CGPoint targetVector = CGPointMake(target2.x - truckPosition.x, target2.y - truckPosition.y);

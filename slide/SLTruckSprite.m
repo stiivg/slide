@@ -29,6 +29,8 @@
 @synthesize wheelBase;
 @synthesize throttle;
 @synthesize rearGrip;
+@synthesize sliding;
+
 
 #pragma mark - Initialization
 - (id)init {
@@ -64,6 +66,7 @@
         self.zRotation = M_PI_2;
         
         throttle = 0.0;  //idling
+        sliding = NO;
         
         //open debug file
         if (kDebugPrint) {
@@ -115,6 +118,16 @@
 
 }
 
+-(void)startSlide {
+    sliding = Initiating;
+    //Start rotating and steer in direction of velocity
+    [self.physicsBody applyAngularImpulse:0.1];
+}
+
+-(void)endSlide {
+    sliding = NotSliding;
+}
+
 //Convert angles > pi to +/-pi range
 -(CGFloat)convertAngle:(CGFloat)angle {
     if (angle > 0 & angle > M_PI) {
@@ -126,21 +139,42 @@
     return angle;
 }
 
--(void)steerToTarget:(CGFloat)steerHeading {
-    //steerHeading is zero to east increasing counter clockwise in range +/- PI
-    CGFloat steerAngle = steerHeading - self.zRotation;
-    steerAngle = [self convertAngle:steerAngle];
-    
+-(void)applySteering:(CGFloat)steerAngle {
     //Limit the steering angle
     if (steerAngle > 0) {
         steerAngle = fminf(steerAngle, kMaxSteerAngle);
     } else {
         steerAngle = fmaxf(steerAngle, -kMaxSteerAngle);
     }
-    
     leftWheel.zRotation = steerAngle;
     rightWheel.zRotation = steerAngle;
     
+}
+
+-(void)steerToTarget:(CGFloat)steerHeading {
+    
+    if (sliding == NotSliding) {
+        //if not sliding steer to target
+        //steerHeading is zero to east increasing counter clockwise in range +/- PI
+        CGFloat steerAngle = steerHeading - self.zRotation;
+        steerAngle = [self convertAngle:steerAngle];
+        
+        [self applySteering:steerAngle];
+        
+    } else if (sliding == Initiating) {
+        //Steer in direction of velocity
+        CGVector velocity = self.physicsBody.velocity;
+        CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
+        CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
+        sideSlipAngle = [self convertAngle:sideSlipAngle];
+        [self applySteering:sideSlipAngle];
+        
+        //Keep rotating until at max steer slide
+        if (sideSlipAngle < kMaxSteerAngle) {
+            [self.physicsBody applyTorque:0.1];
+        }
+        
+    }
     [self applyEngineForce];
     
     CGVector velocity = self.physicsBody.velocity;
@@ -248,30 +282,30 @@
     frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
-//    //scale the forces to prevent zero crossing of velocity
-//    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
-//    CGFloat maxForceX = velocity.dx * -15;
-//    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
-//
-//    CGFloat maxForceY = velocity.dy * -15;
-//    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
-//    CGFloat forceScale = 1;
-//    if (forceScaleX <0) {
-//        forceScale = forceScaleY;
-//    } else if (forceScaleY<0) {
-//        forceScale = forceScaleX;
-//    }
-//    if (forceScaleX > 0 & forceScaleY > 0) {
-//        forceScale = fminf(forceScaleX, forceScaleY);
-//    }
-//    
-//    if (0 < forceScale & forceScale <=1) {
-//        rearTireForce.dx = rearTireForce.dx * forceScale;
-//        rearTireForce.dy = rearTireForce.dy * forceScale;
-//        
-//        frontTireForce.dx = frontTireForce.dx * forceScale;
-//        frontTireForce.dy = frontTireForce.dy * forceScale;
-//    }
+    //scale the forces to prevent zero crossing of velocity
+    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
+    CGFloat maxForceX = velocity.dx * -15;
+    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
+
+    CGFloat maxForceY = velocity.dy * -15;
+    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
+    CGFloat forceScale = 1;
+    if (forceScaleX <0) {
+        forceScale = forceScaleY;
+    } else if (forceScaleY<0) {
+        forceScale = forceScaleX;
+    }
+    if (forceScaleX > 0 & forceScaleY > 0) {
+        forceScale = fminf(forceScaleX, forceScaleY);
+    }
+    
+    if (0 < forceScale & forceScale <=1) {
+        rearTireForce.dx = rearTireForce.dx * forceScale;
+        rearTireForce.dy = rearTireForce.dy * forceScale;
+        
+        frontTireForce.dx = frontTireForce.dx * forceScale;
+        frontTireForce.dy = frontTireForce.dy * forceScale;
+    }
 
 
     [self.physicsBody applyForce:rearTireForce atPoint:rearForcePoint];

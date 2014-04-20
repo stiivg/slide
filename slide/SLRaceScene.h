@@ -15,12 +15,12 @@
 #define kMaxRoadKeyPoints 1000
 
 @interface SLRaceScene : SKScene {
-    CGPoint pathPoints[kMaxRoadKeyPoints];
     SLTruckSprite *truck;
     SKSpriteNode *centerWall;
     SKSpriteNode *drum1;
     SKSpriteNode *drum2;
     NSArray *pivotPoints;
+    SKSpriteNode *slideButton;
     CGFloat steerHeading;
     SLDebugControls *debugControls;
 }
