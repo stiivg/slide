@@ -121,7 +121,8 @@
 -(void)startSlide {
     sliding = Initiating;
     //Start rotating and steer in direction of velocity
-    [self.physicsBody applyAngularImpulse:0.2];
+    CGFloat impulseTorque = [SLConversion scaleFloat:0.2];
+//    [self.physicsBody applyAngularImpulse:impulseTorque];
 }
 
 -(void)endSlide {
@@ -172,7 +173,7 @@
         //Keep rotating until at max steer slide
         if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
             CGFloat torque = [SLConversion scaleFloat:0.5];
-//            [self.physicsBody applyTorque:torque];
+            [self.physicsBody applyTorque:torque];
         }
         
     }
