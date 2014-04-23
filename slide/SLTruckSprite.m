@@ -89,7 +89,7 @@
  */
 - (void)initPhysics {
     wheelBase = 0.19;
-    tireStiffness = 1573;
+    tireStiffness = 700;
     rearGrip = 0.25; //rear front balance
 
 //    CGSize size = self.size; // size is 0,0 !!
@@ -110,8 +110,6 @@
 }
 
 -(void)start {
-    
-//    self.throttle = [SLConversion scaleFloat:60];
     self.physicsBody.angularVelocity = 0;
     self.physicsBody.velocity = CGVectorMake(0, 0);
     self.zRotation = M_PI_2;
@@ -120,6 +118,7 @@
 
 -(void)startSlide {
     sliding = Initiating;
+    self.throttle = self.throttle*2;
     //Start rotating and steer in direction of velocity
     CGFloat impulseTorque = [SLConversion scaleFloat:0.2];
 //    [self.physicsBody applyAngularImpulse:impulseTorque];
@@ -127,6 +126,7 @@
 
 -(void)endSlide {
     sliding = NotSliding;
+    self.throttle = self.throttle/2;
 }
 
 //Convert angles > pi to +/-pi range
@@ -172,7 +172,7 @@
         
         //Keep rotating until at max steer slide
         if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
-            CGFloat torque = [SLConversion scaleFloat:0.5];
+            CGFloat torque = [SLConversion scaleFloat:0.8];
             [self.physicsBody applyTorque:torque];
         }
         
@@ -313,48 +313,29 @@
     
     //scale the forces to prevent zero crossing of velocity
     //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
-    //Add rotation speed to x and scale front and rear forces separately
-    CGFloat maxForceX = (velocity.dx - self.physicsBody.angularVelocity*wheelBase/2) * -15;
-    CGFloat forceScaleX =  maxForceX / rearTireForce.dx;
+    //Add rotation speed to trans vel and scale front and rear forces separately
+    CGFloat velLength = sqrtf(velocity.dx * velocity.dx + velocity.dy * velocity.dy);
+    CGFloat transVel = velLength*sinf(sideSlipAngle); //velocity sideways to truck
+    CGFloat maxTransForce = (transVel - self.physicsBody.angularVelocity*wheelBase/2) * -5;
+    CGFloat rearTireForceLength = sqrtf(rearTireForce.dx*rearTireForce.dx+rearTireForce.dy*rearTireForce.dy);
     
-    CGFloat maxForceY = velocity.dy * -15;
-    CGFloat forceScaleY = maxForceY / rearTireForce.dy;
-    CGFloat forceScale = 1;
-    if (forceScaleX <0) {
-        forceScale = forceScaleY;
-    } else if (forceScaleY<0) {
-        forceScale = forceScaleX;
-    }
-    if (forceScaleX > 0 & forceScaleY > 0) {
-        forceScale = fminf(forceScaleX, forceScaleY);
-    }
-    
+    CGFloat forceScale = maxTransForce / rearTireForceLength;
+    //both same sign and force > max allowed
     if (0 < forceScale & forceScale <=1) {
         rearTireForce.dx = rearTireForce.dx * forceScale;
         rearTireForce.dy = rearTireForce.dy * forceScale;
     }
     
-    //only scalefront force if not steering
-    if (fabsf(frontSlipSteerAngle) < 0.1) {
-        maxForceX = (velocity.dx + self.physicsBody.angularVelocity*wheelBase/2) * -15;
-        forceScaleX =  maxForceX / frontTireForce.dx;
-        
-        maxForceY = velocity.dy * -15;
-        forceScaleY = maxForceY / frontTireForce.dy;
-        forceScale = 1;
-        if (forceScaleX <0) {
-            forceScale = forceScaleY;
-        } else if (forceScaleY<0) {
-            forceScale = forceScaleX;
-        }
-        if (forceScaleX > 0 & forceScaleY > 0) {
-            forceScale = fminf(forceScaleX, forceScaleY);
-        }
-        
-        if (0 < forceScale & forceScale <=1) {
-            frontTireForce.dx = frontTireForce.dx * forceScale;
-            frontTireForce.dy = frontTireForce.dy * forceScale;
-        }
+    //Test velocity in direction of tire force
+    transVel = velLength*sinf(frontSlipSteerAngle); //velocity sideways to front tire
+    maxTransForce = (transVel + self.physicsBody.angularVelocity*wheelBase/2) * -5;
+    CGFloat frontTireForceLength = sqrtf(frontTireForce.dx*frontTireForce.dx+frontTireForce.dy*frontTireForce.dy);
+    
+    forceScale = maxTransForce / frontTireForceLength;
+    
+    if (0 < forceScale & forceScale <=1) {
+        frontTireForce.dx = frontTireForce.dx * forceScale;
+        frontTireForce.dy = frontTireForce.dy * forceScale;
     }
     
     
