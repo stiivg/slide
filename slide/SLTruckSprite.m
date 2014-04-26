@@ -120,7 +120,7 @@
     sliding = Initiating;
     self.throttle = self.throttle*2;
     //Start rotating and steer in direction of velocity
-    CGFloat impulseTorque = [SLConversion scaleFloat:0.2];
+//    CGFloat impulseTorque = [SLConversion scaleFloat:0.2];
 //    [self.physicsBody applyAngularImpulse:impulseTorque];
 }
 
@@ -309,15 +309,20 @@
 //        frontTireForce.dy = frontTireForce.dy * forceScale;
 //    }
 //
-    
+    CGFloat limit = -16;
     
     //scale the forces to prevent zero crossing of velocity
     //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
     //Add rotation speed to trans vel and scale front and rear forces separately
     CGFloat velLength = sqrtf(velocity.dx * velocity.dx + velocity.dy * velocity.dy);
     CGFloat transVel = velLength*sinf(sideSlipAngle); //velocity sideways to truck
-    CGFloat maxTransForce = (transVel - self.physicsBody.angularVelocity*wheelBase/2) * -5;
+    CGFloat wSpeed = self.physicsBody.angularVelocity*wheelBase/2;
+    CGFloat maxTransForce = (transVel - wSpeed) * limit;
     CGFloat rearTireForceLength = sqrtf(rearTireForce.dx*rearTireForce.dx+rearTireForce.dy*rearTireForce.dy);
+    //tire force positiove if rear slip angle negative
+    if (rearSlipAngle > 0) {
+        rearTireForceLength *= -1;
+    }
     
     CGFloat forceScale = maxTransForce / rearTireForceLength;
     //both same sign and force > max allowed
@@ -327,10 +332,13 @@
     }
     
     //Test velocity in direction of tire force
-    transVel = velLength*sinf(frontSlipSteerAngle); //velocity sideways to front tire
-    maxTransForce = (transVel + self.physicsBody.angularVelocity*wheelBase/2) * -5;
+    transVel = velLength*sinf(sideSlipAngle - leftWheel.zRotation); //velocity sideways to front tire
+    maxTransForce = (transVel + wSpeed*cosf(leftWheel.zRotation)) * limit;
     CGFloat frontTireForceLength = sqrtf(frontTireForce.dx*frontTireForce.dx+frontTireForce.dy*frontTireForce.dy);
     
+    if (frontSlipSteerAngle > 0) {
+        frontTireForceLength *= -1;
+    }
     forceScale = maxTransForce / frontTireForceLength;
     
     if (0 < forceScale & forceScale <=1) {
