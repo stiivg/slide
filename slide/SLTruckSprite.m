@@ -72,7 +72,7 @@
         if (kDebugPrint) {
             NSString *filePath = @"/Users/stevengallagher/Documents/SlideGame/slide/debug.tsv";
             debugFile = fopen([filePath cStringUsingEncoding:NSUTF8StringEncoding], "w");
-            fprintf(debugFile, "velX\tvelY\tvelAngle\tsideSlip\twSpeed\trearSlipAngle\tfrontSlipAngle\tFrontSteer\tReversing\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
+            fprintf(debugFile, "velX\tvelY\tvelAngle\tsideSlip\twSpeed\trearSlipAngle\tfrontSlipAngle\tFrontSteer\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
             
         }
 
@@ -191,16 +191,15 @@
 -(void)applyEngineForce {
     //engine force in direction truck faces
     CGFloat truckDirection = self.zRotation;
-    CGVector engineVector = CGVectorMake(throttle*cosf(truckDirection),
-                                         throttle*sinf(truckDirection));
+    CGVector engineVector = CGVectorMake(-throttle*cosf(truckDirection),
+                                         -throttle*sinf(truckDirection));
     [self.physicsBody applyForce:engineVector];
 }
 
 -(CGFloat)calcSlipAngle:(CGFloat)sideSlipAngle cgDistance:(CGFloat)distance {
     CGFloat angVel = self.physicsBody.angularVelocity;
     CGFloat wSpeed = angVel * distance;
-    CGFloat slipAngle = (sinf(sideSlipAngle) + wSpeed) / fabsf(cosf(sideSlipAngle));
-    slipAngle = atanf(slipAngle);
+    CGFloat slipAngle = atan2f(sinf(sideSlipAngle) + wSpeed, cosf(sideSlipAngle));
     return slipAngle;
 }
 
@@ -211,12 +210,20 @@
  */
 -(CGFloat)calcScrubForce:(CGFloat)slipAngle tireGrip:(CGFloat)grip {
     CGFloat scrubForce = tireStiffness;
-    if(slipAngle < 0 ) {
+    CGFloat smallSlipAngle = slipAngle;
+    if(smallSlipAngle < 0 ) {
         scrubForce = -tireStiffness;
+        if (smallSlipAngle < -M_PI_2) {
+            smallSlipAngle = -M_PI - smallSlipAngle;
+        }
+    } else {
+        if (smallSlipAngle > M_PI_2) {
+            smallSlipAngle = M_PI - smallSlipAngle;
+        }
     }
     
-    if(fabsf(slipAngle) < kTireAngleMaxLinear) {
-        scrubForce = (slipAngle / kTireAngleMaxLinear) * tireStiffness;
+    if(fabsf(smallSlipAngle) < kTireAngleMaxLinear) {
+        scrubForce = (smallSlipAngle / kTireAngleMaxLinear) * tireStiffness;
     }
 
     scrubForce = grip*[SLConversion scaleFloat:scrubForce]; //apply grip
@@ -251,7 +258,7 @@
     BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
     CGFloat frontSlipSteerAngle;
 //    if (reversing) {
-//        frontSlipSteerAngle = -(frontSlipAngle + leftWheel.zRotation);
+//        frontSlipSteerAngle = frontSlipAngle + leftWheel.zRotation;
 //    } else {
         frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
 //    }
@@ -286,7 +293,7 @@
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
     //Smaller number damps forces more
-    CGFloat limit = -1; //16 just starts to oscillate on rotations.
+    CGFloat limit = -8; //16 just starts to oscillate on rotations.
     
     //scale the forces to prevent zero crossing of velocity
     //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
@@ -309,7 +316,11 @@
     }
     
     //Test velocity in direction of tire force
-    transVel = velLength*sinf(sideSlipAngle - leftWheel.zRotation); //velocity sideways to front tire
+//    if (reversing) {
+//        transVel = velLength*sinf(sideSlipAngle + leftWheel.zRotation); //velocity sideways to front tire
+//    } else {
+        transVel = velLength*sinf(sideSlipAngle - leftWheel.zRotation); //velocity sideways to front tire
+//    }
     maxTransForce = (transVel + wSpeed*cosf(leftWheel.zRotation)) * limit;
     CGFloat frontTireForceLength = sqrtf(frontTireForce.dx*frontTireForce.dx+frontTireForce.dy*frontTireForce.dy);
     
@@ -331,7 +342,7 @@
     if (kDebugPrint) {
         CGFloat angVel = self.physicsBody.angularVelocity;
         
-        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocity.dx,velocity.dy, velocityAngle, sideSlipAngle, angVel, rearSlipAngle, frontSlipAngle,frontSlipSteerAngle,reversing,
+        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", velocity.dx,velocity.dy, velocityAngle, sideSlipAngle, angVel, rearSlipAngle, frontSlipAngle,frontSlipSteerAngle,
                 rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
     }
 }
