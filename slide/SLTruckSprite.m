@@ -11,7 +11,7 @@
 #import "SLConversion.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireAngleMaxLinear 0.9 //Maximum angle with linear tire scrub force
+#define kTireAngleMaxLinear 1.0 //Maximum angle with linear tire scrub force
 
 #define kCGBalance 0.5
 #define kDebugPrint NO
@@ -57,9 +57,9 @@
         rightWheel.position = [SLConversion scalePoint:CGPointMake(15, -12)];
         
         
+        [self addChild:truck];
         [self addChild:leftWheel];
         [self addChild:rightWheel];
-        [self addChild:truck];
         
         
         [self initPhysics];
@@ -172,7 +172,8 @@
         
         //Keep rotating until at max steer slide
         if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
-            CGFloat torque = [SLConversion scaleFloat:0.8];
+            CGFloat torque = [SLConversion scaleFloat:0.4];
+            torque = [SLConversion scaleFloat:torque]; // Torque is 4x for iPad
             [self.physicsBody applyTorque:torque];
         }
         
@@ -249,11 +250,11 @@
     //apply steering to front slip angle
     BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
     CGFloat frontSlipSteerAngle;
-    if (reversing) {
-        frontSlipSteerAngle = -(frontSlipAngle + leftWheel.zRotation);
-    } else {
+//    if (reversing) {
+//        frontSlipSteerAngle = -(frontSlipAngle + leftWheel.zRotation);
+//    } else {
         frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
-    }
+//    }
     
     CGFloat rearScrubForce = [self calcScrubForce:rearSlipAngle tireGrip:self.rearGrip];
     
@@ -284,32 +285,8 @@
     frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
-//    //scale the forces to prevent zero crossing of velocity
-//    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
-//    CGFloat maxForceX = velocity.dx * -15;
-//    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
-//
-//    CGFloat maxForceY = velocity.dy * -15;
-//    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
-//    CGFloat forceScale = 1;
-//    if (forceScaleX <0) {
-//        forceScale = forceScaleY;
-//    } else if (forceScaleY<0) {
-//        forceScale = forceScaleX;
-//    }
-//    if (forceScaleX > 0 & forceScaleY > 0) {
-//        forceScale = fminf(forceScaleX, forceScaleY);
-//    }
-//    
-//    if (0 < forceScale & forceScale <=1) {
-//        rearTireForce.dx = rearTireForce.dx * forceScale;
-//        rearTireForce.dy = rearTireForce.dy * forceScale;
-//        
-//        frontTireForce.dx = frontTireForce.dx * forceScale;
-//        frontTireForce.dy = frontTireForce.dy * forceScale;
-//    }
-//
-    CGFloat limit = -16;
+    //Smaller number damps forces more
+    CGFloat limit = -1; //16 just starts to oscillate on rotations.
     
     //scale the forces to prevent zero crossing of velocity
     //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
@@ -319,7 +296,7 @@
     CGFloat wSpeed = self.physicsBody.angularVelocity*wheelBase/2;
     CGFloat maxTransForce = (transVel - wSpeed) * limit;
     CGFloat rearTireForceLength = sqrtf(rearTireForce.dx*rearTireForce.dx+rearTireForce.dy*rearTireForce.dy);
-    //tire force positiove if rear slip angle negative
+    //tire force positive if rear slip angle negative
     if (rearSlipAngle > 0) {
         rearTireForceLength *= -1;
     }
