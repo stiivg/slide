@@ -172,7 +172,7 @@
         
         //Keep rotating until at max steer slide
         if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
-            CGFloat torque = [SLConversion scaleFloat:0.4];
+            CGFloat torque = [SLConversion scaleFloat:0.2];
             torque = [SLConversion scaleFloat:torque]; // Torque is 4x for iPad
             [self.physicsBody applyTorque:torque];
         }
@@ -191,8 +191,8 @@
 -(void)applyEngineForce {
     //engine force in direction truck faces
     CGFloat truckDirection = self.zRotation;
-    CGVector engineVector = CGVectorMake(-throttle*cosf(truckDirection),
-                                         -throttle*sinf(truckDirection));
+    CGVector engineVector = CGVectorMake(throttle*cosf(truckDirection),
+                                         throttle*sinf(truckDirection));
     [self.physicsBody applyForce:engineVector];
 }
 
