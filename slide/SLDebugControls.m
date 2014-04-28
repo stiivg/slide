@@ -84,7 +84,7 @@
     
     rearGripLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
     
-    rearGripLabel.text = @"Rear Grip";
+    rearGripLabel.text = @"Balance";
     rearGripLabel.fontSize = [SLConversion scaleFloat:10];
     
     rearGripLabel.position = CGPointMake(sliderLocation.x,
@@ -118,7 +118,7 @@
     
     tireStiffnessLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Light"];
     
-    tireStiffnessLabel.text = @"Stiffness";
+    tireStiffnessLabel.text = @"Tire Grip";
     tireStiffnessLabel.fontSize = [SLConversion scaleFloat:10];
     
     tireStiffnessLabel.position = CGPointMake(sliderLocation.x,
@@ -276,13 +276,13 @@
         _isShown = YES;
 
         rearGripSlider.value = truck.rearGrip;
-        rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.2f",truck.rearGrip];
+        rearGripLabel.text = [NSString stringWithFormat:@"Balance %3.2f",truck.rearGrip];
         tireStiffnessSlider.value = truck.tireStiffness;
-        tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",truck.tireStiffness];
+        tireStiffnessLabel.text = [NSString stringWithFormat:@"Tire Grip %3.0f",truck.tireStiffness];
         wheelbaseSlider.value = truck.wheelBase;
         wheelbasLabel.text = [NSString stringWithFormat:@"Wheelbase %2.2f",truck.wheelBase];
         sloMoSlider.value = self.physicsSpeed;
-        sloMoLabel.text =[NSString stringWithFormat:@"SloMo %2.1f",self.physicsSpeed];
+        sloMoLabel.text =[NSString stringWithFormat:@"SloMo %2.2f",self.physicsSpeed];
 
         debugNodes.hidden = NO;
         throttleSlider.hidden = NO;
@@ -305,12 +305,12 @@
 
 
 - (IBAction)rearGripValueChanged:(UISlider *)sender {
-    rearGripLabel.text = [NSString stringWithFormat:@"Rear Grip %3.2f",sender.value];
+    rearGripLabel.text = [NSString stringWithFormat:@"Balance %3.2f",sender.value];
     truck.rearGrip = sender.value;
 }
 
 - (IBAction)stiffnessValueChanged:(UISlider *)sender {
-    tireStiffnessLabel.text = [NSString stringWithFormat:@"Stiffness %3.0f",sender.value];
+    tireStiffnessLabel.text = [NSString stringWithFormat:@"Tire Grip %3.0f",sender.value];
     truck.tireStiffness = sender.value;
 }
 
@@ -320,7 +320,7 @@
 }
 
 - (IBAction)sloMoValueChanged:(UISlider *)sender {
-    sloMoLabel.text = [NSString stringWithFormat:@"SloMo %2.1f",sender.value];
+    sloMoLabel.text = [NSString stringWithFormat:@"SloMo %2.2f",sender.value];
     self.physicsSpeed = sender.value;
     debugScene.physicsWorld.speed = self.physicsSpeed;
 }
