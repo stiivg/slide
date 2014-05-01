@@ -11,14 +11,19 @@
 #import "SLTruckSprite.h"
 #import "VectorUtils.h"
 #import "SLDebugControls.h"
-
+#import "SLConversion.h"
 #define kMaxRoadKeyPoints 1000
+
+//Define object to hold pivot point info
+@interface Circle : NSObject
+
+@property CGPoint centre;
+@property CGFloat radius;
+
+@end
 
 @interface SLRaceScene : SKScene {
     SLTruckSprite *truck;
-    SKSpriteNode *centerWall;
-    SKSpriteNode *drum1;
-    SKSpriteNode *drum2;
     NSArray *pivotPoints;
     SKSpriteNode *slideButton;
     CGFloat steerHeading;

@@ -26,6 +26,7 @@
 		645CE4B318CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
 		645CE4BB18CD2C7300CBF980 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 645CE4B918CD2C7300CBF980 /* InfoPlist.strings */; };
 		645CE4BD18CD2C7300CBF980 /* slideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 645CE4BC18CD2C7300CBF980 /* slideTests.m */; };
+		6482A0501911FD05002929CB /* SLRace2Scene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6482A04F1911FD05002929CB /* SLRace2Scene.m */; };
 		64D287D418D00C4B00580705 /* SLTruckSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 64D287D318D00C4B00580705 /* SLTruckSprite.m */; };
 		64E7E5D418F09B9300A23C03 /* sprites-ipad.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 64E7E5CF18F09B9300A23C03 /* sprites-ipad.atlas */; };
 		64E7E5D518F09B9300A23C03 /* sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 64E7E5D118F09B9300A23C03 /* sprites.atlas */; };
@@ -72,6 +73,8 @@
 		645CE4B818CD2C7300CBF980 /* SlideTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SlideTests-Info.plist"; sourceTree = "<group>"; };
 		645CE4BA18CD2C7300CBF980 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		645CE4BC18CD2C7300CBF980 /* slideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = slideTests.m; sourceTree = "<group>"; };
+		6482A04E1911FD05002929CB /* SLRace2Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLRace2Scene.h; sourceTree = "<group>"; };
+		6482A04F1911FD05002929CB /* SLRace2Scene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLRace2Scene.m; sourceTree = "<group>"; };
 		64D287D218D00C4B00580705 /* SLTruckSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTruckSprite.h; sourceTree = "<group>"; };
 		64D287D318D00C4B00580705 /* SLTruckSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTruckSprite.m; sourceTree = "<group>"; };
 		64E7E5CF18F09B9300A23C03 /* sprites-ipad.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = "sprites-ipad.atlas"; sourceTree = "<group>"; };
@@ -177,6 +180,8 @@
 				645CE4A218CD2C7300CBF980 /* SLViewController.m */,
 				645CE4A418CD2C7300CBF980 /* SLRaceScene.h */,
 				645CE4A518CD2C7300CBF980 /* SLRaceScene.m */,
+				6482A04E1911FD05002929CB /* SLRace2Scene.h */,
+				6482A04F1911FD05002929CB /* SLRace2Scene.m */,
 				645CE4A918CD2C7300CBF980 /* Images.xcassets */,
 				645CE49018CD2C7300CBF980 /* Supporting Files */,
 			);
@@ -305,7 +310,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "Slide" */;
+			buildConfigurationList = 645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "slide" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -356,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				645CE49618CD2C7300CBF980 /* main.m in Sources */,
+				6482A0501911FD05002929CB /* SLRace2Scene.m in Sources */,
 				64D287D418D00C4B00580705 /* SLTruckSprite.m in Sources */,
 				645CE4A618CD2C7300CBF980 /* SLRaceScene.m in Sources */,
 				640B5EB418D65A2E003558C0 /* HermitePath.m in Sources */,
@@ -573,7 +579,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "Slide" */ = {
+		645CE47F18CD2C7300CBF980 /* Build configuration list for PBXProject "slide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				645CE4BE18CD2C7300CBF980 /* Debug */,
