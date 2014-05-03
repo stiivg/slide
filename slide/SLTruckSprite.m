@@ -294,7 +294,7 @@
     CGFloat transVel = velLength*sinf(sideSlipAngle); //velocity sideways to truck
     CGFloat wSpeed = self.physicsBody.angularVelocity*wheelBase/2;
     CGFloat maxTransForce = (transVel - wSpeed) * limit;
-    CGFloat rearTireForceLength = sqrtf(rearTireForce.dx*rearTireForce.dx+rearTireForce.dy*rearTireForce.dy);
+    CGFloat rearTireForceLength = vectorLength(rearTireForce);
     //tire force positive if rear slip angle negative
     if (rearSlipAngle > 0) {
         rearTireForceLength *= -1;
@@ -310,7 +310,7 @@
     //Test velocity in direction of tire force
     transVel = velLength*sinf(sideSlipAngle - leftWheel.zRotation); //velocity sideways to front tire
     maxTransForce = (transVel + wSpeed*cosf(leftWheel.zRotation)) * limit;
-    CGFloat frontTireForceLength = sqrtf(frontTireForce.dx*frontTireForce.dx+frontTireForce.dy*frontTireForce.dy);
+    CGFloat frontTireForceLength = vectorLength(frontTireForce);
     
     if (frontSlipSteerAngle > 0) {
         frontTireForceLength *= -1;

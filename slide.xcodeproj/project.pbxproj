@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		640B5EB418D65A2E003558C0 /* HermitePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 640B5EB318D65A2E003558C0 /* HermitePath.m */; };
 		640B5EB618D67408003558C0 /* controlpoints.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 640B5EB518D67408003558C0 /* controlpoints.tsv */; };
+		643902641915518100DAC6A2 /* SLPivotPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 643902631915518100DAC6A2 /* SLPivotPoint.m */; };
 		645CE48818CD2C7300CBF980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48718CD2C7300CBF980 /* Foundation.framework */; };
 		645CE48A18CD2C7300CBF980 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48918CD2C7300CBF980 /* CoreGraphics.framework */; };
 		645CE48C18CD2C7300CBF980 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645CE48B18CD2C7300CBF980 /* UIKit.framework */; };
@@ -50,6 +51,8 @@
 		640B5EB318D65A2E003558C0 /* HermitePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HermitePath.m; sourceTree = "<group>"; };
 		640B5EB518D67408003558C0 /* controlpoints.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = controlpoints.tsv; sourceTree = "<group>"; };
 		641D3A7518DFB9EB004D0F4F /* VectorUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VectorUtils.h; sourceTree = "<group>"; };
+		643902621915518100DAC6A2 /* SLPivotPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLPivotPoint.h; sourceTree = "<group>"; };
+		643902631915518100DAC6A2 /* SLPivotPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLPivotPoint.m; sourceTree = "<group>"; };
 		645CE48418CD2C7300CBF980 /* Slide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		645CE48718CD2C7300CBF980 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		645CE48918CD2C7300CBF980 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -180,6 +183,8 @@
 				645CE4A218CD2C7300CBF980 /* SLViewController.m */,
 				645CE4A418CD2C7300CBF980 /* SLRaceScene.h */,
 				645CE4A518CD2C7300CBF980 /* SLRaceScene.m */,
+				643902621915518100DAC6A2 /* SLPivotPoint.h */,
+				643902631915518100DAC6A2 /* SLPivotPoint.m */,
 				6482A04E1911FD05002929CB /* SLRace2Scene.h */,
 				6482A04F1911FD05002929CB /* SLRace2Scene.m */,
 				645CE4A918CD2C7300CBF980 /* Images.xcassets */,
@@ -368,6 +373,7 @@
 				645CE4A318CD2C7300CBF980 /* SLViewController.m in Sources */,
 				645CE49A18CD2C7300CBF980 /* SLAppDelegate.m in Sources */,
 				64E7E5DC18F2117000A23C03 /* SLDebugControls.m in Sources */,
+				643902641915518100DAC6A2 /* SLPivotPoint.m in Sources */,
 				64E7E5D918F0B3FE00A23C03 /* SLConversion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

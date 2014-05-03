@@ -12,15 +12,8 @@
 #import "VectorUtils.h"
 #import "SLDebugControls.h"
 #import "SLConversion.h"
-#define kMaxRoadKeyPoints 1000
+#import "SLPivotPoint.h"
 
-//Define object to hold pivot point info
-@interface Circle : NSObject
-
-@property CGPoint centre;
-@property CGFloat radius;
-
-@end
 
 @interface SLRaceScene : SKScene {
     SLTruckSprite *truck;

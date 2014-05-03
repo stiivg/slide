@@ -26,6 +26,10 @@ static inline float ccpLength(CGPoint a) {
     return sqrtf(a.x * a.x + a.y * a.y);
 }
 
+static inline float vectorLength(CGVector a) {
+    return sqrtf(a.dx * a.dx + a.dy * a.dy);
+}
+
 // Makes a vector have a length of 1
 static inline CGPoint ccpNormalize(CGPoint a) {
     float length = ccpLength(a);

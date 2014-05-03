@@ -38,11 +38,11 @@ SKSpriteNode *drum2;
     centerWall.position = [SLConversion convertPoint:CGPointMake(100, centerHt)];
     [self addChild:centerWall];
     
-    Circle *pivot1 = [[Circle alloc] init];
+    SLPivotPoint *pivot1 = [[SLPivotPoint alloc] init];
     pivot1.centre = [SLConversion convertPoint:CGPointMake(100, centerHt+100)];
     pivot1.radius = [SLConversion scaleFloat:50];
     
-    Circle *pivot2 = [[Circle alloc] init];
+    SLPivotPoint *pivot2 = [[SLPivotPoint alloc] init];
     pivot2.centre = [SLConversion convertPoint:CGPointMake(100, centerHt-100)];
     pivot2.radius = [SLConversion scaleFloat:50];
     
