@@ -99,10 +99,16 @@
 }
 
 //test angle within PI CCW of prev, and within PI CW of next
--(BOOL)passedAngle:(CGFloat)test prevAngle:(CGFloat)prev nextAngle:(CGFloat)next {
+-(BOOL)passedAngle:(CGFloat)test prevAngle:(CGFloat)prev nextAngle:(CGFloat)next clockwise:(BOOL)CW{
     CGFloat deltaPrev = [self limitToPI:test-prev];
+    if (CW) {
+        deltaPrev = -deltaPrev;
+    }
     if (deltaPrev >= 0) {
         CGFloat deltaNext= [self limitToPI:test-next];
+        if (CW) {
+            deltaNext = -deltaNext;
+        }
         if (deltaNext <= 0) {
             return true;
         }
@@ -116,11 +122,11 @@
     targetAngle = atan2f(self.position.y-targetPoint.centre.y, self.position.x - targetPoint.centre.x);
 
     if (targetIsCleared) {
-        if ([self passedAngle:targetPoint.transitionAngle prevAngle:lastAngle nextAngle:targetAngle]) {
+        if ([self passedAngle:targetPoint.transitionAngle prevAngle:lastAngle nextAngle:targetAngle clockwise:targetPoint.CW]) {
             return true;
         }
     } else {
-        if ([self passedAngle:targetPoint.clearAngle prevAngle:lastAngle nextAngle:targetAngle]) {
+        if ([self passedAngle:targetPoint.clearAngle prevAngle:lastAngle nextAngle:targetAngle clockwise:targetPoint.CW]) {
             targetIsCleared = true;
             return false;
         }

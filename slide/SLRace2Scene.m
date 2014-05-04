@@ -29,23 +29,23 @@
     self.backgroundColor = [SKColor colorWithRed:0.82 green:0.57 blue:0.3 alpha:1.0]; //Sand color
     
     SLPivotPoint *pivot1 = [[SLPivotPoint alloc] init];
-    pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+80)];
+    pivot1.centre = [SLConversion convertPoint:CGPointMake(160, centerHt+100)];
     pivot1.radius = [SLConversion scaleFloat:50];
     
     SLPivotPoint *pivot2 = [[SLPivotPoint alloc] init];
-    pivot2.centre = [SLConversion convertPoint:CGPointMake(160, centerHt-80)];
+    pivot2.centre = [SLConversion convertPoint:CGPointMake(160, centerHt-100)];
     pivot2.radius = [SLConversion scaleFloat:50];
     
     pivotPoints = [NSArray arrayWithObjects:pivot1, pivot2, nil];
     
     
     pivot1.clearAngle = M_PI_2;
-    pivot1.transitionAngle = M_PI;
-    pivot1.CCW = YES;
+    pivot1.transitionAngle = -2.8;
+    pivot1.CW = false;
     
     pivot2.clearAngle = -M_PI_2;
-    pivot2.transitionAngle = 0;
-    pivot2.CCW = YES;
+    pivot2.transitionAngle = 2.8;
+    pivot2.CW = true;
     
     //oil drums at pivots
     SKTextureAtlas *spriteAtlas = [SLConversion textureAtlasNamed:@"sprites"];

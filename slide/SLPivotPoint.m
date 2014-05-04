@@ -21,7 +21,7 @@
 
 @synthesize clearAngle;
 @synthesize transitionAngle;
-@synthesize CCW;
+@synthesize CW;
 
 
 //From http://paulbourke.net/geometry/circlesphere/CircleCircleIntersection2.m
@@ -93,9 +93,10 @@
     if (pivotDistance <= self.radius) {
         //On radius; steer along tangent
         steerHeading = atan2f(pivotVector.y, pivotVector.x)-M_PI_2;
-        if (steerHeading > M_PI) {
-            steerHeading = M_2_PI - steerHeading;
+        if (CW) {
+            steerHeading+=M_PI;
         }
+        
     } else {
         //Outside radius; steer to tangent of radius
         // targets are the intersection of the pivot circle and carPivotCircle
@@ -108,9 +109,11 @@
         carPivotCircle.radius = pivotDistance/2;
         
         [self findIntersectionOfCircle:self circle:carPivotCircle sol1:&target1 sol2:&target2];
-        //Assume target2 for now
-        //Steer towards target2
-        CGPoint targetVector = CGPointMake(target2.x - truckPosition.x, target2.y - truckPosition.y);
+        CGPoint target = target2;
+        if (CW) {
+            target = target1;
+        }
+        CGPoint targetVector = CGPointMake(target.x - truckPosition.x, target.y - truckPosition.y);
         steerHeading = atan2f(targetVector.y,targetVector.x);
     }
     return steerHeading;

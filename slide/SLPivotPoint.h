@@ -20,7 +20,7 @@
 
 @property CGFloat clearAngle;
 @property CGFloat transitionAngle;
-@property BOOL CCW;
+@property BOOL CW;
 
 -(CGFloat)heading:(CGPoint) truckPosition;
 
