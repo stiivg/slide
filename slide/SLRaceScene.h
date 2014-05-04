@@ -24,6 +24,7 @@
     SLDebugControls *debugControls;
     
     UISwipeGestureRecognizer* swipeRightGesture;
+    UISwipeGestureRecognizer* swipeLeftGesture;
 
 }
 @property SKNode*  debugOverlay;

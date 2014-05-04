@@ -33,6 +33,7 @@
 -(void)addThrottleControl;
 -(void)addRearGripControl;
 -(void)addVectorSwitch;
+-(void)removeSubViews;
 
 @property SLTruckSprite *truck;
 @property BOOL isShown;

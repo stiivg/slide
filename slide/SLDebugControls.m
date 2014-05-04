@@ -337,7 +337,16 @@
     }
 }
 
+-(void)removeSubViews {
+    [throttleSlider removeFromSuperview];
+    [rearGripSlider removeFromSuperview];
+    [tireStiffnessSlider removeFromSuperview];
+    [wheelbaseSlider removeFromSuperview];
+    [vectorsSwitch removeFromSuperview];
+    [pauseSwitch removeFromSuperview];
+    [sloMoSlider removeFromSuperview];
 
+}
 
 
 

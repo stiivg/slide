@@ -7,11 +7,12 @@
 //
 
 #import "SLRaceScene.h"
+#import "SLGameManager.h"
 
 
 @implementation SLRaceScene
 
-const bool kDisplayControls = true;
+const bool kDisplayControls = false;
 
 
 -(id)initWithSize:(CGSize)size {
@@ -80,15 +81,18 @@ const bool kDisplayControls = true;
     [self initPhysics];
     
 }
-
+-(void)createDebugControls {
+    debugControls = [[SLDebugControls alloc] initWithScene:self];
+    debugControls.truck = truck;
+    //Force toggle to turn on debug with default values
+    debugControls.isShown = NO;
+    [debugControls toggleIsShown];
+ 
+}
 - (void)didMoveToView:(SKView *)view
 {
     if (kDisplayControls) {
-        debugControls = [[SLDebugControls alloc] initWithScene:self];
-        debugControls.truck = truck;
-        //Force toggle to turn on debug with default values
-        debugControls.isShown = NO;
-        [debugControls toggleIsShown];
+        [self createDebugControls];
     }
     
     swipeRightGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRight:)];
@@ -96,15 +100,28 @@ const bool kDisplayControls = true;
     
     [view addGestureRecognizer: swipeRightGesture ];
     
+    swipeLeftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeft:)];
+    [swipeLeftGesture setDirection: UISwipeGestureRecognizerDirectionLeft];
+    
+    [view addGestureRecognizer: swipeLeftGesture ];
+    
 }
 
 - ( void ) willMoveFromView: (SKView *) view {
-    [view removeGestureRecognizer:swipeRightGesture ];
+    [view removeGestureRecognizer:swipeRightGesture];
+    if (debugControls) {
+        [debugControls removeSubViews];
+    }
     
 }
 
 -(void) handleSwipeRight:(UISwipeGestureRecognizer *) recognizer {
-//    [self.view nextScene];
+    [[SLGameManager sharedGameManager] nextRaceScene:self.view];
+    
+}
+
+-(void) handleSwipeLeft:(UISwipeGestureRecognizer *) recognizer {
+    [[SLGameManager sharedGameManager] prevRaceScene:self.view];
     
 }
 
@@ -125,7 +142,11 @@ const bool kDisplayControls = true;
     for (UITouch *touch in touches) {
         CGPoint location = [touch locationInNode:self];
         if (location.x < [SLConversion scaleFloat:50] & location.y < [SLConversion scaleFloat:50]) {
-            [debugControls toggleIsShown];
+            if (!debugControls) {
+                [self createDebugControls];
+            } else {
+                [debugControls toggleIsShown];
+            }
         } else if([slideButton containsPoint:location]){
             [truck startSlide];
         } else {
