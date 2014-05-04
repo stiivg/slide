@@ -30,6 +30,9 @@
 @synthesize throttle;
 @synthesize rearGrip;
 @synthesize sliding;
+@synthesize targetPoint;
+@synthesize targetAngle;
+@synthesize targetIsCleared;
 
 
 #pragma mark - Initialization
@@ -80,6 +83,50 @@
         return self;
     } else
         return nil;
+}
+
+
+- (SLPivotPoint*)targetPoint {
+    return targetPoint;
+}
+
+//Save the new target angle when the target is set
+- (void)setTargetPoint:(SLPivotPoint*)target {
+    targetPoint = target;
+
+    targetAngle = atan2f(self.position.y-target.centre.y, self.position.x - target.centre.x);
+    targetIsCleared = false;
+}
+
+//test angle within PI CCW of prev, and within PI CW of next
+-(BOOL)passedAngle:(CGFloat)test prevAngle:(CGFloat)prev nextAngle:(CGFloat)next {
+    CGFloat deltaPrev = [self limitToPI:test-prev];
+    if (deltaPrev >= 0) {
+        CGFloat deltaNext= [self limitToPI:test-next];
+        if (deltaNext <= 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//True when car has cleared target and passed transition angle
+-(BOOL)hasTransitionedTarget {
+    CGFloat lastAngle = targetAngle;
+    targetAngle = atan2f(self.position.y-targetPoint.centre.y, self.position.x - targetPoint.centre.x);
+
+    if (targetIsCleared) {
+        if ([self passedAngle:targetPoint.transitionAngle prevAngle:lastAngle nextAngle:targetAngle]) {
+            return true;
+        }
+    } else {
+        if ([self passedAngle:targetPoint.clearAngle prevAngle:lastAngle nextAngle:targetAngle]) {
+            targetIsCleared = true;
+            return false;
+        }
+        
+    }
+    return false;
 }
 
 

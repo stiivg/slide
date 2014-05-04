@@ -7,6 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "SLPivotPoint.h"
 
 @interface SLTruckSprite : SKSpriteNode {
     SKSpriteNode *truckShadow;
@@ -43,6 +44,12 @@ typedef NS_ENUM(NSUInteger, SlideState) {
 @property CGFloat throttle;
 @property CGFloat rearGrip;
 @property SlideState sliding;
+@property SLPivotPoint* targetPoint;
+
+//angle from the pivot point to the car
+@property CGFloat targetAngle;
+
+@property BOOL targetIsCleared;
 
 -(void)startSlide;
 -(void)endSlide;
@@ -50,6 +57,7 @@ typedef NS_ENUM(NSUInteger, SlideState) {
 -(void)prepareToDraw;
 -(void)initPhysics;
 -(void)start;
+-(BOOL)hasTransitionedTarget;
 
 @end
 

@@ -13,10 +13,6 @@
 
 const bool kDisplayControls = true;
 
-SKSpriteNode *centerWall;
-SKSpriteNode *drum1;
-SKSpriteNode *drum2;
-
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
@@ -39,9 +35,10 @@ SKSpriteNode *drum2;
     
     self.backgroundColor = [SKColor colorWithRed:0.82 green:0.57 blue:0.3 alpha:1.0]; //Sand color
     
-    centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0]
+    SKSpriteNode *centerWall = [SKSpriteNode spriteNodeWithColor:[SKColor colorWithRed:0.72 green:0.47 blue:0.2 alpha:1.0]
                                               size:[SLConversion scaleSize:CGSizeMake(5, 160)]];
     centerWall.position = [SLConversion convertPoint:CGPointMake(160, centerHt)];
+    centerWall.name = @"CenterWall";
     [self addChild:centerWall];
     
     SLPivotPoint *pivot1 = [[SLPivotPoint alloc] init];
@@ -57,12 +54,12 @@ SKSpriteNode *drum2;
     //oil drums at pivots
     SKTextureAtlas *spriteAtlas = [SLConversion textureAtlasNamed:@"sprites"];
     SKTexture *drumTexture = [spriteAtlas textureNamed:@"drum_top"];
-    drum1 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
+    SKSpriteNode *drum1 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
     drum1.name = @"Drum1";
     drum1.position = pivot1.centre;
     [self addChild:drum1];
     
-    drum2 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
+    SKSpriteNode *drum2 = [SKSpriteNode spriteNodeWithTexture:drumTexture];
     drum2.name = @"Drum2";
     drum2.position = pivot2.centre;
     [self addChild:drum2];
@@ -100,6 +97,7 @@ SKSpriteNode *drum2;
     //Create edge loop around border
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     //Create center edge
+    SKNode *centerWall = [self childNodeWithName:@"CenterWall"];
     centerWall.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:[SLConversion scalePoint:CGPointMake(0, -80)]
                                                           toPoint:[SLConversion scalePoint:CGPointMake(0, 80)]];
 }
@@ -130,6 +128,21 @@ SKSpriteNode *drum2;
     
 }
 
+-(SLPivotPoint*)target:(CGPoint)position {
+    //determine the target pivot point
+    //simplistically right side 1, left side 2
+    //Changed to delay moving to next pivot until past centre
+    SLPivotPoint *targetPivot = pivotPoints[0];
+    if (position.x < targetPivot.centre.x) {
+        if (position.y < ((Circle *)pivotPoints[0]).centre.y) {
+            targetPivot = pivotPoints[1];
+        }
+    } else if (position.y < ((Circle *)pivotPoints[1]).centre.y) {
+        targetPivot = pivotPoints[1];
+    }
+
+    return targetPivot;
+}
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called at start of frame processing */
@@ -138,20 +151,8 @@ SKSpriteNode *drum2;
     [self.debugOverlay removeAllChildren];
     
     //Calculate the target point
-    CGPoint truckPosition = truck.position;
-    //determine the target pivot point
-    //simplistically right side 1, left side 2
-    //Changed to delay moving to next pivot until past centre
-    SLPivotPoint *targetPivot = pivotPoints[0];
-    if (truckPosition.x < targetPivot.centre.x) {
-        if (truckPosition.y < ((Circle *)pivotPoints[0]).centre.y) {
-            targetPivot = pivotPoints[1];
-        }
-    } else if (truckPosition.y < ((Circle *)pivotPoints[1]).centre.y) {
-            targetPivot = pivotPoints[1];
-        }
-
-    steerHeading = [targetPivot heading:truckPosition];
+    SLPivotPoint *targetPivot = [self target:truck.position];
+    steerHeading = [targetPivot heading:truck.position];
     
     //Send steerHeading to the truck
     [truck steerToTarget:steerHeading];

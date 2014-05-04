@@ -96,7 +96,6 @@
         if (steerHeading > M_PI) {
             steerHeading = M_2_PI - steerHeading;
         }
-        //steerHeading = fmodf(steerHeading, M_2_PI);
     } else {
         //Outside radius; steer to tangent of radius
         // targets are the intersection of the pivot circle and carPivotCircle
