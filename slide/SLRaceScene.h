@@ -15,12 +15,16 @@
 #import "SLPivotPoint.h"
 
 
-@interface SLRaceScene : SKScene {
+
+@interface SLRaceScene : SKScene <UIGestureRecognizerDelegate> {
     SLTruckSprite *truck;
     NSArray *pivotPoints;
     SKSpriteNode *slideButton;
     CGFloat steerHeading;
     SLDebugControls *debugControls;
+    
+    UISwipeGestureRecognizer* swipeRightGesture;
+
 }
 @property SKNode*  debugOverlay;
 

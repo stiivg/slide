@@ -90,7 +90,24 @@ const bool kDisplayControls = true;
         debugControls.isShown = NO;
         [debugControls toggleIsShown];
     }
+    
+    swipeRightGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRight:)];
+    [swipeRightGesture setDirection: UISwipeGestureRecognizerDirectionRight];
+    
+    [view addGestureRecognizer: swipeRightGesture ];
+    
 }
+
+- ( void ) willMoveFromView: (SKView *) view {
+    [view removeGestureRecognizer:swipeRightGesture ];
+    
+}
+
+-(void) handleSwipeRight:(UISwipeGestureRecognizer *) recognizer {
+//    [self.view nextScene];
+    
+}
+
 
 -(void)initPhysics {
 //    self.scaleMode = SKSceneScaleModeAspectFit;

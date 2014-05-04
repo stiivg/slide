@@ -41,13 +41,34 @@
         skView.showsPhysics = NO;
         
         // Create and configure the scene.
-        SKScene * scene = [SLRace2Scene sceneWithSize:skView.bounds.size];
+        SKScene * scene = [SLRaceScene sceneWithSize:skView.bounds.size];
         scene.scaleMode = SKSceneScaleModeAspectFill;
         
         // Present the scene.
         [skView presentScene:scene];
     }
 }
+
+//- (void)nextScene{
+//    
+//    // Configure the view.
+//    SKView * skView = (SKView *)self.view;
+//    if (!skView.scene) {
+//        skView.showsFPS = YES;
+//        skView.showsNodeCount = YES;
+//        skView.showsPhysics = NO;
+//        
+//        // Create and configure the scene.
+//        SKTransition *reveal = [SKTransition revealWithDirection:SKTransitionDirectionDown duration:1.0];
+//        SKScene * scene = [SLRace2Scene sceneWithSize:skView.bounds.size];
+//        scene.scaleMode = SKSceneScaleModeAspectFill;
+//        
+//        // Present the scene.
+//        [skView presentScene:scene transition:reveal];
+//    }
+//
+//}
+
 
 //Hides the top status bar with the signal, battery state...
 - (BOOL)prefersStatusBarHidden {
