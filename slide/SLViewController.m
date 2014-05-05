@@ -8,6 +8,7 @@
 
 #import "SLViewController.h"
 #import "SLRace2Scene.h"
+#import "SLRace3Scene.h"
 
 @implementation SLViewController
 
@@ -41,7 +42,7 @@
         skView.showsPhysics = NO;
         
         // Create and configure the scene.
-        SKScene * scene = [SLRaceScene sceneWithSize:skView.bounds.size];
+        SKScene * scene = [SLRace3Scene sceneWithSize:skView.bounds.size];
         scene.scaleMode = SKSceneScaleModeAspectFill;
         
         // Present the scene.
