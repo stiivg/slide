@@ -16,6 +16,7 @@
 @property (readwrite) BOOL isMusicON;
 @property (readwrite) BOOL isSoundEffectsON;
 @property (readwrite) BOOL isTutorialOn;
+@property NSInteger sceneID;
 
 - (void)nextRaceScene:(SKView*)skView;
 - (void)prevRaceScene:(SKView*)skView;
