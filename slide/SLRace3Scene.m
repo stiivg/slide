@@ -27,24 +27,24 @@
     self.backgroundColor = [SKColor colorWithRed:0.82 green:0.57 blue:0.3 alpha:1.0]; //Sand color
     
     SLPivotPoint *pivot1 = [[SLPivotPoint alloc] init];
-    pivot1.centre = [SLConversion convertPoint:CGPointMake(220, centerHt-110)];
-    pivot1.radius = [SLConversion scaleFloat:50];
+    pivot1.centre = [SLConversion convertPoint:CGPointMake(240, centerHt-130)];
+    pivot1.radius = [SLConversion scaleFloat:40];
     
     SLPivotPoint *pivot2 = [[SLPivotPoint alloc] init];
-    pivot2.centre = [SLConversion convertPoint:CGPointMake(220, centerHt+110)];
-    pivot2.radius = [SLConversion scaleFloat:50];
+    pivot2.centre = [SLConversion convertPoint:CGPointMake(240, centerHt+130)];
+    pivot2.radius = [SLConversion scaleFloat:40];
     
     SLPivotPoint *pivot3 = [[SLPivotPoint alloc] init];
-    pivot3.centre = [SLConversion convertPoint:CGPointMake(100, centerHt+110)];
-    pivot3.radius = [SLConversion scaleFloat:50];
+    pivot3.centre = [SLConversion convertPoint:CGPointMake(80, centerHt+130)];
+    pivot3.radius = [SLConversion scaleFloat:40];
     
     SLPivotPoint *pivot4 = [[SLPivotPoint alloc] init];
     pivot4.centre = [SLConversion convertPoint:CGPointMake(160, centerHt)];
-    pivot4.radius = [SLConversion scaleFloat:50];
+    pivot4.radius = [SLConversion scaleFloat:60];
     
     SLPivotPoint *pivot5 = [[SLPivotPoint alloc] init];
-    pivot5.centre = [SLConversion convertPoint:CGPointMake(100, centerHt-110)];
-    pivot5.radius = [SLConversion scaleFloat:50];
+    pivot5.centre = [SLConversion convertPoint:CGPointMake(80, centerHt-130)];
+    pivot5.radius = [SLConversion scaleFloat:40];
     
     pivotPoints = [NSArray arrayWithObjects:pivot1, pivot2, pivot3, pivot4, pivot5, nil];
     

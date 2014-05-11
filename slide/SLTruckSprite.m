@@ -56,8 +56,8 @@
         truckShadow.position = [SLConversion scalePoint:CGPointMake(4, 4)];
         [self addChild:truckShadow];
         
-        leftWheel.position = [SLConversion scalePoint:CGPointMake(15, 12)];
-        rightWheel.position = [SLConversion scalePoint:CGPointMake(15, -12)];
+        leftWheel.position = [SLConversion scalePoint:CGPointMake(8, 6)];
+        rightWheel.position = [SLConversion scalePoint:CGPointMake(8, -6)];
         
         
         [self addChild:truck];
@@ -149,7 +149,7 @@
     //Use Cener to move mass relative to node texture
 //    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(24, 29)]
 //                                                       center:CGPointMake(-10, 0)];
-    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
+    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(24, 15)]];
     self.physicsBody.affectedByGravity = false;
     self.physicsBody.angularDamping = 0.1;
     self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
@@ -319,7 +319,7 @@
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
                                          rearScrubForce*sinf(torqueForceDirection));
 
-    CGFloat cgDistance = [SLConversion scaleFloat:-24];
+    CGFloat cgDistance = [SLConversion scaleFloat:-12];
     rearForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                      self.position.y+cgDistance*sinf(self.zRotation));
     
@@ -333,7 +333,7 @@
     frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
                                   frontScrubForce*sinf(frontForceDirection));
     
-    cgDistance = [SLConversion scaleFloat:24];
+    cgDistance = [SLConversion scaleFloat:12];
     frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
