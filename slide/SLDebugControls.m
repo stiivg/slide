@@ -14,6 +14,7 @@
 @implementation SLDebugControls
 
 @synthesize truck;
+@synthesize truck2;
 @synthesize isShown = _isShown;
 @synthesize showsVectors;
 @synthesize physicsSpeed;
@@ -296,10 +297,11 @@
 }
 
 
-
+//apply throttle to both trucks
 - (IBAction)sliderValueChanged:(UISlider *)sender {
     throttleLabel.text = [NSString stringWithFormat:@"Throttle %3.0f",sender.value];
     truck.throttle = [SLConversion scaleFloat:sender.value];
+    truck2.throttle = [SLConversion scaleFloat:sender.value];
 }
 
 

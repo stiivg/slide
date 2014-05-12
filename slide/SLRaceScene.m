@@ -76,7 +76,14 @@ const bool kDisplayControls = false;
     truck.position = [SLConversion convertPoint:CGPointMake(215, 240)];
     
     [self addChild:truck];
-
+    
+    //Create the 2nd truck
+    truck2 = [[SLTruckSprite alloc] init];
+    
+    truck2.position = [SLConversion convertPoint:CGPointMake(230, 240)];
+    
+    [self addChild:truck2];
+    
     
     [self initPhysics];
     
@@ -84,6 +91,7 @@ const bool kDisplayControls = false;
 -(void)createDebugControls {
     debugControls = [[SLDebugControls alloc] initWithScene:self];
     debugControls.truck = truck;
+    debugControls.truck2 = truck2;
     //Force toggle to turn on debug with default values
     debugControls.isShown = NO;
     [debugControls toggleIsShown];
@@ -152,6 +160,7 @@ const bool kDisplayControls = false;
         } else {
             truck.position = location;
             [truck start];
+            [truck2 start];
         }
     }
 }
@@ -194,6 +203,14 @@ const bool kDisplayControls = false;
     
     //Send steerHeading to the truck
     [truck steerToTarget:steerHeading];
+
+
+    //Calculate the 2nd truck target point
+    SLPivotPoint *target2Pivot = [self target:truck2.position];
+    CGFloat steer2Heading = [target2Pivot heading:truck2.position];
+    
+    //Send steerHeading to the truck
+    [truck2 steerToTarget:steer2Heading];
 }
 
 -(void)debugDrawPivotPoints {
@@ -263,6 +280,7 @@ const bool kDisplayControls = false;
     /* Called before final frame rendered */
     // Update the car shadow position
     [truck prepareToDraw];
+    [truck2 prepareToDraw];
     
     
     //Display debug nodes

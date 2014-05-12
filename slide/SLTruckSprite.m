@@ -53,7 +53,7 @@
         leftWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
         rightWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
 
-        truckShadow.position = [SLConversion scalePoint:CGPointMake(4, 4)];
+        truckShadow.position = [SLConversion scalePoint:CGPointMake(2, 2)];
         [self addChild:truckShadow];
         
         leftWheel.position = [SLConversion scalePoint:CGPointMake(8, 6)];
@@ -159,7 +159,7 @@
 - (void)prepareToDraw {
     //Move shadow depending on rotation
     CGFloat rotation = self.zRotation + M_PI_2;
-    truckShadow.position =  [SLConversion scalePoint:CGPointMake(4*cos(rotation), -4*sin(rotation))];
+    truckShadow.position =  [SLConversion scalePoint:CGPointMake(2*cos(rotation), -2*sin(rotation))];
 }
 
 -(void)start {

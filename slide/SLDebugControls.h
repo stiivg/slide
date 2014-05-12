@@ -36,6 +36,7 @@
 -(void)removeSubViews;
 
 @property SLTruckSprite *truck;
+@property SLTruckSprite *truck2;
 @property BOOL isShown;
 @property BOOL showsVectors;
 @property CGFloat physicsSpeed;

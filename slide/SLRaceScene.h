@@ -18,6 +18,7 @@
 
 @interface SLRaceScene : SKScene <UIGestureRecognizerDelegate> {
     SLTruckSprite *truck;
+    SLTruckSprite *truck2;
     NSArray *pivotPoints;
     SKSpriteNode *slideButton;
     CGFloat steerHeading;
