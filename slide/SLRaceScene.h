@@ -11,18 +11,22 @@
 #import "SLTruckSprite.h"
 #import "VectorUtils.h"
 #import "SLDebugControls.h"
+#import "SLConversion.h"
+#import "SLPivotPoint.h"
 
-#define kMaxRoadKeyPoints 1000
 
-@interface SLRaceScene : SKScene {
+
+@interface SLRaceScene : SKScene <UIGestureRecognizerDelegate> {
     SLTruckSprite *truck;
-    SKSpriteNode *centerWall;
-    SKSpriteNode *drum1;
-    SKSpriteNode *drum2;
+    SLTruckSprite *truck2;
     NSArray *pivotPoints;
     SKSpriteNode *slideButton;
     CGFloat steerHeading;
     SLDebugControls *debugControls;
+    
+    UISwipeGestureRecognizer* swipeRightGesture;
+    UISwipeGestureRecognizer* swipeLeftGesture;
+
 }
 @property SKNode*  debugOverlay;
 

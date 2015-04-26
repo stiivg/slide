@@ -11,7 +11,7 @@
 #import "SLConversion.h"
 
 #define kMaxSteerAngle 1.0f
-#define kTireAngleMaxLinear 0.9 //Maximum angle with linear tire scrub force
+#define kTireAngleMaxLinear 1.0 //Maximum angle with linear tire scrub force
 
 #define kCGBalance 0.5
 #define kDebugPrint NO
@@ -30,6 +30,9 @@
 @synthesize throttle;
 @synthesize rearGrip;
 @synthesize sliding;
+@synthesize targetPoint;
+@synthesize targetAngle;
+@synthesize targetIsCleared;
 
 
 #pragma mark - Initialization
@@ -50,16 +53,16 @@
         leftWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
         rightWheel = [SKSpriteNode spriteNodeWithTexture:wheelTexture];
 
-        truckShadow.position = [SLConversion scalePoint:CGPointMake(4, 4)];
+        truckShadow.position = [SLConversion scalePoint:CGPointMake(2, 2)];
         [self addChild:truckShadow];
         
-        leftWheel.position = [SLConversion scalePoint:CGPointMake(15, 12)];
-        rightWheel.position = [SLConversion scalePoint:CGPointMake(15, -12)];
+        leftWheel.position = [SLConversion scalePoint:CGPointMake(8, 6)];
+        rightWheel.position = [SLConversion scalePoint:CGPointMake(8, -6)];
         
         
+        [self addChild:truck];
         [self addChild:leftWheel];
         [self addChild:rightWheel];
-        [self addChild:truck];
         
         
         [self initPhysics];
@@ -72,7 +75,7 @@
         if (kDebugPrint) {
             NSString *filePath = @"/Users/stevengallagher/Documents/SlideGame/slide/debug.tsv";
             debugFile = fopen([filePath cStringUsingEncoding:NSUTF8StringEncoding], "w");
-            fprintf(debugFile, "velX\tvelY\tvelAngle\tsideSlip\twSpeed\trearSlipAngle\tfrontSlipAngle\tFrontSteer\tReversing\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
+            fprintf(debugFile, "velX\tvelY\tvelAngle\tsideSlip\twSpeed\trearSlipAngle\tfrontSlipAngle\tFrontSteer\trearTireX\trearTireY\tfrontTireX\tfrontTireY\n");
             
         }
 
@@ -80,6 +83,56 @@
         return self;
     } else
         return nil;
+}
+
+
+- (SLPivotPoint*)targetPoint {
+    return targetPoint;
+}
+
+//Save the new target angle when the target is set
+- (void)setTargetPoint:(SLPivotPoint*)target {
+    targetPoint = target;
+
+    targetAngle = atan2f(self.position.y-target.centre.y, self.position.x - target.centre.x);
+    targetIsCleared = false;
+}
+
+//test angle within PI CCW of prev, and within PI CW of next
+-(BOOL)passedAngle:(CGFloat)test prevAngle:(CGFloat)prev nextAngle:(CGFloat)next clockwise:(BOOL)CW{
+    CGFloat deltaPrev = [self limitToPI:test-prev];
+    if (CW) {
+        deltaPrev = -deltaPrev;
+    }
+    if (deltaPrev >= 0) {
+        CGFloat deltaNext= [self limitToPI:test-next];
+        if (CW) {
+            deltaNext = -deltaNext;
+        }
+        if (deltaNext <= 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//True when car has cleared target and passed transition angle
+-(BOOL)hasTransitionedTarget {
+    CGFloat lastAngle = targetAngle;
+    targetAngle = atan2f(self.position.y-targetPoint.centre.y, self.position.x - targetPoint.centre.x);
+
+    if (targetIsCleared) {
+        if ([self passedAngle:targetPoint.transitionAngle prevAngle:lastAngle nextAngle:targetAngle clockwise:targetPoint.CW]) {
+            return true;
+        }
+    } else {
+        if ([self passedAngle:targetPoint.clearAngle prevAngle:lastAngle nextAngle:targetAngle clockwise:targetPoint.CW]) {
+            targetIsCleared = true;
+            return false;
+        }
+        
+    }
+    return false;
 }
 
 
@@ -96,7 +149,7 @@
     //Use Cener to move mass relative to node texture
 //    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(24, 29)]
 //                                                       center:CGPointMake(-10, 0)];
-    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(48, 29)]];
+    self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[SLConversion scaleSize:CGSizeMake(24, 15)]];
     self.physicsBody.affectedByGravity = false;
     self.physicsBody.angularDamping = 0.1;
     self.physicsBody.mass = 0.25; //Mass the same for all scaled sizes
@@ -106,7 +159,7 @@
 - (void)prepareToDraw {
     //Move shadow depending on rotation
     CGFloat rotation = self.zRotation + M_PI_2;
-    truckShadow.position =  [SLConversion scalePoint:CGPointMake(4*cos(rotation), -4*sin(rotation))];
+    truckShadow.position =  [SLConversion scalePoint:CGPointMake(2*cos(rotation), -2*sin(rotation))];
 }
 
 -(void)start {
@@ -130,7 +183,7 @@
 }
 
 //Convert angles > pi to +/-pi range
--(CGFloat)convertAngle:(CGFloat)angle {
+-(CGFloat)limitToPI:(CGFloat)angle {
     if (angle > 0 & angle > M_PI) {
         angle = angle - M_PI - M_PI; //large pos -> small neg
     } else if (angle <0 & angle < -M_PI) {
@@ -158,7 +211,7 @@
         //if not sliding steer to target
         //steerHeading is zero to east increasing counter clockwise in range +/- PI
         CGFloat steerAngle = steerHeading - self.zRotation;
-        steerAngle = [self convertAngle:steerAngle];
+        steerAngle = [self limitToPI:steerAngle];
         
         [self applySteering:steerAngle];
         
@@ -167,12 +220,13 @@
         CGVector velocity = self.physicsBody.velocity;
         CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
         CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
-        sideSlipAngle = [self convertAngle:sideSlipAngle];
+        sideSlipAngle = [self limitToPI:sideSlipAngle];
         [self applySteering:sideSlipAngle];
         
         //Keep rotating until at max steer slide
         if (fabsf(sideSlipAngle) < kMaxSteerAngle) {
-            CGFloat torque = [SLConversion scaleFloat:0.8];
+            CGFloat torque = [SLConversion scaleFloat:0.2];
+            torque = [SLConversion scaleFloat:torque]; // Torque is 4x for iPad
             [self.physicsBody applyTorque:torque];
         }
         
@@ -198,8 +252,7 @@
 -(CGFloat)calcSlipAngle:(CGFloat)sideSlipAngle cgDistance:(CGFloat)distance {
     CGFloat angVel = self.physicsBody.angularVelocity;
     CGFloat wSpeed = angVel * distance;
-    CGFloat slipAngle = (sinf(sideSlipAngle) + wSpeed) / fabsf(cosf(sideSlipAngle));
-    slipAngle = atanf(slipAngle);
+    CGFloat slipAngle = atan2f(sinf(sideSlipAngle) + wSpeed, cosf(sideSlipAngle));
     return slipAngle;
 }
 
@@ -210,12 +263,20 @@
  */
 -(CGFloat)calcScrubForce:(CGFloat)slipAngle tireGrip:(CGFloat)grip {
     CGFloat scrubForce = tireStiffness;
-    if(slipAngle < 0 ) {
+    CGFloat smallSlipAngle = slipAngle;
+    if(smallSlipAngle < 0 ) {
         scrubForce = -tireStiffness;
+        if (smallSlipAngle < -M_PI_2) {
+            smallSlipAngle = -M_PI - smallSlipAngle;
+        }
+    } else {
+        if (smallSlipAngle > M_PI_2) {
+            smallSlipAngle = M_PI - smallSlipAngle;
+        }
     }
     
-    if(fabsf(slipAngle) < kTireAngleMaxLinear) {
-        scrubForce = (slipAngle / kTireAngleMaxLinear) * tireStiffness;
+    if(fabsf(smallSlipAngle) < kTireAngleMaxLinear) {
+        scrubForce = (smallSlipAngle / kTireAngleMaxLinear) * tireStiffness;
     }
 
     scrubForce = grip*[SLConversion scaleFloat:scrubForce]; //apply grip
@@ -240,20 +301,14 @@
     CGVector velocity = self.physicsBody.velocity;
     CGFloat velocityAngle =  atan2f(velocity.dy, velocity.dx);
     CGFloat sideSlipAngle = velocityAngle - self.zRotation; //angle of truck to direction of travel
-    sideSlipAngle = [self convertAngle:sideSlipAngle];
+    sideSlipAngle = [self limitToPI:sideSlipAngle];
     
     
     rearSlipAngle = [self calcSlipAngle:sideSlipAngle cgDistance:(kCGBalance-1)*wheelBase];
     frontSlipAngle = [self calcSlipAngle:sideSlipAngle cgDistance:kCGBalance*wheelBase];
     
     //apply steering to front slip angle
-    BOOL reversing = fabsf(sideSlipAngle) > M_PI_2;
-    CGFloat frontSlipSteerAngle;
-    if (reversing) {
-        frontSlipSteerAngle = -(frontSlipAngle + leftWheel.zRotation);
-    } else {
-        frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
-    }
+    CGFloat frontSlipSteerAngle = frontSlipAngle - leftWheel.zRotation;
     
     CGFloat rearScrubForce = [self calcScrubForce:rearSlipAngle tireGrip:self.rearGrip];
     
@@ -264,8 +319,7 @@
     rearTireForce = CGVectorMake(rearScrubForce*cosf(torqueForceDirection),
                                          rearScrubForce*sinf(torqueForceDirection));
 
-//    rearForcePoint = [self applyTireForce:rearTireForce cgDistance:-24];
-    CGFloat cgDistance = [SLConversion scaleFloat:-24];
+    CGFloat cgDistance = [SLConversion scaleFloat:-12];
     rearForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                      self.position.y+cgDistance*sinf(self.zRotation));
     
@@ -279,37 +333,12 @@
     frontTireForce = CGVectorMake(frontScrubForce*cosf(frontForceDirection),
                                   frontScrubForce*sinf(frontForceDirection));
     
-//    frontForcePoint = [self applyTireForce:frontTireForce cgDistance:24];
-    cgDistance = [SLConversion scaleFloat:24];
+    cgDistance = [SLConversion scaleFloat:12];
     frontForcePoint = CGPointMake(self.position.x+cgDistance*cosf(self.zRotation),
                                  self.position.y+cgDistance*sinf(self.zRotation));
 
-//    //scale the forces to prevent zero crossing of velocity
-//    //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
-//    CGFloat maxForceX = velocity.dx * -15;
-//    CGFloat forceScaleX =  maxForceX / ( rearTireForce.dx+frontTireForce.dx );
-//
-//    CGFloat maxForceY = velocity.dy * -15;
-//    CGFloat forceScaleY = maxForceY / ( rearTireForce.dy+frontTireForce.dy );
-//    CGFloat forceScale = 1;
-//    if (forceScaleX <0) {
-//        forceScale = forceScaleY;
-//    } else if (forceScaleY<0) {
-//        forceScale = forceScaleX;
-//    }
-//    if (forceScaleX > 0 & forceScaleY > 0) {
-//        forceScale = fminf(forceScaleX, forceScaleY);
-//    }
-//    
-//    if (0 < forceScale & forceScale <=1) {
-//        rearTireForce.dx = rearTireForce.dx * forceScale;
-//        rearTireForce.dy = rearTireForce.dy * forceScale;
-//        
-//        frontTireForce.dx = frontTireForce.dx * forceScale;
-//        frontTireForce.dy = frontTireForce.dy * forceScale;
-//    }
-//
-    CGFloat limit = -16;
+    //Smaller number damps forces more
+    CGFloat limit = -8; //16 just starts to oscillate on rotations.
     
     //scale the forces to prevent zero crossing of velocity
     //Test for max force to apply here F = -mdv/dt = -dv 0.25 / 1/60 = -dv*15
@@ -318,8 +347,8 @@
     CGFloat transVel = velLength*sinf(sideSlipAngle); //velocity sideways to truck
     CGFloat wSpeed = self.physicsBody.angularVelocity*wheelBase/2;
     CGFloat maxTransForce = (transVel - wSpeed) * limit;
-    CGFloat rearTireForceLength = sqrtf(rearTireForce.dx*rearTireForce.dx+rearTireForce.dy*rearTireForce.dy);
-    //tire force positiove if rear slip angle negative
+    CGFloat rearTireForceLength = vectorLength(rearTireForce);
+    //tire force positive if rear slip angle negative
     if (rearSlipAngle > 0) {
         rearTireForceLength *= -1;
     }
@@ -334,7 +363,7 @@
     //Test velocity in direction of tire force
     transVel = velLength*sinf(sideSlipAngle - leftWheel.zRotation); //velocity sideways to front tire
     maxTransForce = (transVel + wSpeed*cosf(leftWheel.zRotation)) * limit;
-    CGFloat frontTireForceLength = sqrtf(frontTireForce.dx*frontTireForce.dx+frontTireForce.dy*frontTireForce.dy);
+    CGFloat frontTireForceLength = vectorLength(frontTireForce);
     
     if (frontSlipSteerAngle > 0) {
         frontTireForceLength *= -1;
@@ -354,7 +383,7 @@
     if (kDebugPrint) {
         CGFloat angVel = self.physicsBody.angularVelocity;
         
-        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\t%f\t%f\t%f\t%f\n", velocity.dx,velocity.dy, velocityAngle, sideSlipAngle, angVel, rearSlipAngle, frontSlipAngle,frontSlipSteerAngle,reversing,
+        fprintf(debugFile, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", velocity.dx,velocity.dy, velocityAngle, sideSlipAngle, angVel, rearSlipAngle, frontSlipAngle,frontSlipSteerAngle,
                 rearTireForce.dx,rearTireForce.dy,frontTireForce.dx,frontTireForce.dy);
     }
 }
