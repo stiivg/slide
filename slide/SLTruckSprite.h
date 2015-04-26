@@ -51,6 +51,7 @@ typedef NS_ENUM(NSUInteger, SlideState) {
 
 @property BOOL targetIsCleared;
 
+-(id)initWithIndex:(int)index;
 -(void)startSlide;
 -(void)endSlide;
 -(void)steerToTarget:(CGFloat)steerHeading;

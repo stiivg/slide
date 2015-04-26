@@ -34,18 +34,33 @@
 @synthesize targetAngle;
 @synthesize targetIsCleared;
 
+SKSpriteNode *truck;
+
+- (id)init {
+    self = [self initWithIndex:0];
+    
+    return self;
+}
 
 #pragma mark - Initialization
-- (id)init {
+- (id)initWithIndex:(int )index {
     if ( self = [super init] ) {
         
         // Load sprites
         
         SKTextureAtlas *spriteAtlas = [SLConversion textureAtlasNamed:@"sprites"];
-        SKTexture *truckTexture = [spriteAtlas textureNamed:@"red_truck"];
-        SKSpriteNode *truck = [SKSpriteNode spriteNodeWithTexture:truckTexture];
-        truck.userData = [[NSMutableDictionary alloc] init]; //for possible future use
-        truck.name = @"RedTruck";
+        if (index == 0) {
+            SKTexture *truckTexture = [spriteAtlas textureNamed:@"red_truck"];
+            truck = [SKSpriteNode spriteNodeWithTexture:truckTexture];
+            truck.userData = [[NSMutableDictionary alloc] init]; //for possible future use
+            truck.name = @"RedTruck";
+        } else {
+            SKTexture *truckTexture = [spriteAtlas textureNamed:@"blue_truck"];
+            truck = [SKSpriteNode spriteNodeWithTexture:truckTexture];
+            truck.userData = [[NSMutableDictionary alloc] init]; //for possible future use
+            truck.name = @"BlueTruck";
+
+        }
         
         SKTexture *shadowTexture = [spriteAtlas textureNamed:@"shadow"];
         truckShadow = [SKSpriteNode spriteNodeWithTexture:shadowTexture];

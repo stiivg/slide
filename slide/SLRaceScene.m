@@ -71,14 +71,14 @@ const bool kDisplayControls = false;
     [self addChild:slideButton];
     
     //Create the player truck
-    truck = [[SLTruckSprite alloc] init];
+    truck = [[SLTruckSprite alloc] initWithIndex:0];
     
     truck.position = [SLConversion convertPoint:CGPointMake(215, 240)];
     
     [self addChild:truck];
     
     //Create the 2nd truck
-    truck2 = [[SLTruckSprite alloc] init];
+    truck2 = [[SLTruckSprite alloc] initWithIndex:1];
     
     truck2.position = [SLConversion convertPoint:CGPointMake(230, 240)];
     
